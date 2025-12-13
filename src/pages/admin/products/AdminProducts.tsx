@@ -122,7 +122,7 @@ const AdminProducts = () => {
                         {/* Ver */}
                         <button
                             onClick={() =>
-                                navigate(`/admin/product/${info.row.original.idProducts}`)
+                                navigate(`/product/${info.row.original.idProducts}`)
                             }
                             className="p-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 rounded-lg transition-all border border-purple-500/30 hover:border-purple-500/50"
                         >

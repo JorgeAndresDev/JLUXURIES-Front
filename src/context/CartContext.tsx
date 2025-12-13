@@ -5,9 +5,9 @@ import { useAuth } from './AuthContext';
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (item: Omit<CartItem, 'estado'>) => Promise<void>;
-    removeFromCart: (productId: number) => void;
-    clearCart: () => void;
+    addToCart: (item: Omit<CartItem, 'estado'> & { productStock?: number }) => Promise<void>;
+    removeFromCart: (productId: number) => Promise<void>;
+    clearCart: () => Promise<void>;
     loading: boolean;
     total: number;
 }
@@ -54,10 +54,37 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         fetchCart();
     }, [isAuthenticated]);
 
-    const addToCart = async (item: Omit<CartItem, 'estado'>) => {
+    // Helper function to get available stock for a product
+    const getAvailableStock = (productId: number, productStock: number): number => {
+        const itemInCart = cart.find(item => item.id_producto === productId);
+        const quantityInCart = itemInCart?.cantidad || 0;
+        return productStock - quantityInCart;
+    };
+
+    const addToCart = async (item: Omit<CartItem, 'estado'> & { productStock?: number }) => {
         try {
+            // Extract productStock from item (passed from ProductsPage/Carousel)
+            const { productStock, ...cartItem } = item;
+
+            // Validate stock if provided
+            if (productStock !== undefined) {
+                // Check if product is out of stock
+                if (productStock <= 0) {
+                    throw new Error('Producto agotado');
+                }
+
+                // Check if user already has this product in cart
+                const itemInCart = cart.find(i => i.id_producto === cartItem.id_producto);
+                const currentQuantity = itemInCart?.cantidad || 0;
+
+                // Check if adding would exceed available stock
+                if (currentQuantity >= productStock) {
+                    throw new Error(`Solo hay ${productStock} unidades disponibles y ya tienes ${currentQuantity} en el carrito`);
+                }
+            }
+
             await api.post('/cart/register_cart', {
-                ...item,
+                ...cartItem,
                 estado: 'activo'
             });
             await fetchCart();
@@ -67,13 +94,41 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
-    const removeFromCart = (productId: number) => {
-        console.warn("Remove API not specified, implementing local filter only for UI");
-        setCart(prev => prev.filter(item => item.id_producto !== productId));
+    const removeFromCart = async (productId: number) => {
+        try {
+            // Find the cart item to get its id_carrito
+            const cartItem = cart.find(item => item.id_producto === productId);
+            if (!cartItem) {
+                console.warn('Product not found in cart');
+                return;
+            }
+
+            // Call backend API to delete the cart item
+            await api.delete(`/cart/delete_cart/${cartItem.id_carrito}`);
+
+            // Update local state after successful deletion
+            setCart(prev => prev.filter(item => item.id_producto !== productId));
+        } catch (error) {
+            console.error("Error removing item from cart", error);
+            throw error;
+        }
     };
 
-    const clearCart = () => {
-        setCart([]);
+    const clearCart = async () => {
+        try {
+            // Delete all cart items from backend
+            const deletePromises = cart.map(item =>
+                api.delete(`/cart/delete_cart/${item.id_carrito}`)
+            );
+
+            await Promise.all(deletePromises);
+
+            // Clear local state after successful deletion
+            setCart([]);
+        } catch (error) {
+            console.error("Error clearing cart", error);
+            throw error;
+        }
     };
 
     const total = cart.reduce((acc, item) => acc + (item.precio_unitario * item.cantidad), 0);

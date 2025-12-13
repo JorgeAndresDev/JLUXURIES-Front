@@ -9,7 +9,7 @@ export default function ProductDetailPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -17,6 +17,8 @@ export default function ProductDetailPage() {
 
     useEffect(() => {
         fetchProduct();
+        // Scroll to top when page loads or product changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [id]);
 
     const fetchProduct = async () => {
@@ -40,6 +42,13 @@ export default function ProductDetailPage() {
 
         if (!product) return;
 
+        // Check if product is out of stock
+        if (product.Quantity <= 0) {
+            setToast({ message: 'Producto agotado', type: 'error' });
+            setTimeout(() => setToast(null), 3000);
+            return;
+        }
+
         try {
             const storedUser = localStorage.getItem('user');
             if (!storedUser) {
@@ -58,13 +67,17 @@ export default function ProductDetailPage() {
                 id_cliente: user.id_cliente,
                 id_producto: product.idProducts,
                 cantidad: 1,
-                precio_unitario: product.Price
+                precio_unitario: product.Price,
+                productStock: product.Quantity // Pass stock for validation
             });
             setToast({ message: '¡Producto agregado al carrito exitosamente!', type: 'success' });
             setTimeout(() => setToast(null), 3000);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error al agregar al carrito:", error);
-            setToast({ message: 'Error al agregar al carrito. Intenta nuevamente.', type: 'error' });
+            setToast({
+                message: error.message || 'Error al agregar al carrito. Intenta nuevamente.',
+                type: 'error'
+            });
             setTimeout(() => setToast(null), 3000);
         }
     };
@@ -100,27 +113,28 @@ export default function ProductDetailPage() {
     return (
         <div className="container mx-auto px-4 pt-16 pb-4">
             {/* Toast Notification */}
+            {/* Toast Notification - Optimized */}
             {toast && (
-                <div className="fixed top-20 right-4 z-50 animate-[slideIn_0.3s_ease-out]">
-                    <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-sm border ${toast.type === 'success'
-                        ? 'bg-green-600/90 border-green-400/50 text-white'
-                        : 'bg-red-600/90 border-red-400/50 text-white'
+                <div className="fixed top-20 right-4 z-50 animate-[slideIn_0.2s_ease-out]">
+                    <div className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-2xl border ${toast.type === 'success'
+                        ? 'bg-green-600/95 border-green-400/50 text-white'
+                        : 'bg-red-600/95 border-red-400/50 text-white'
                         }`}>
                         {toast.type === 'success' ? (
-                            <svg className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         ) : (
-                            <svg className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         )}
-                        <span className="font-semibold">{toast.message}</span>
+                        <span className="font-medium text-sm">{toast.message}</span>
                         <button
                             onClick={() => setToast(null)}
-                            className="ml-2 hover:opacity-80 transition-opacity"
+                            className="ml-1 hover:opacity-80 transition-opacity"
                         >
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -194,7 +208,11 @@ export default function ProductDetailPage() {
                                                 : "bg-red-500/20 text-red-400"
                                             }`}
                                     >
-                                        {product.Quantity}
+                                        {product.Quantity > 10
+                                            ? `${product.Quantity} unidades`
+                                            : product.Quantity > 0
+                                                ? `¡Solo ${product.Quantity}!`
+                                                : 'Agotado'}
                                     </span>
                                 </div>
 
@@ -224,26 +242,32 @@ export default function ProductDetailPage() {
                                 {/* Add to Cart Button */}
                                 <button
                                     onClick={handleAddToCart}
-                                    disabled={product.Quantity === 0}
-                                    className="w-full py-3 px-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white rounded-xl font-bold shadow-lg shadow-green-900/30 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                                    disabled={product.Quantity <= 0}
+                                    className={`w-full py-3 px-4 rounded-xl font-bold shadow-lg transform transition-all duration-150 flex items-center justify-center gap-2 ${product.Quantity <= 0
+                                        ? 'bg-gray-600 cursor-not-allowed opacity-50'
+                                        : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-green-900/30 hover:scale-[1.02]'
+                                        } text-white`}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                                     </svg>
-                                    {product.Quantity === 0 ? 'Agotado' : 'Agregar al Carrito'}
+                                    {product.Quantity <= 0 ? 'Agotado' : 'Agregar al Carrito'}
                                 </button>
 
-                                {/* Edit and Close Buttons */}
+                                {/* Edit and Close Buttons - Admin only for Edit */}
                                 <div className="flex gap-2">
-                                    <Link
-                                        to={`/admin/edit-product/${product.idProducts}`}
-                                        className="flex-1 py-2.5 px-3 bg-gradient-to-r from-[#1E6BFF] to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-xl font-bold shadow-lg shadow-blue-900/30 transform hover:scale-[1.02] transition-all text-center text-sm"
-                                    >
-                                        Editar
-                                    </Link>
+                                    {user?.role === 'admin' && (
+                                        <Link
+                                            to={`/admin/edit-product/${product.idProducts}`}
+                                            className="flex-1 py-2.5 px-3 bg-gradient-to-r from-[#1E6BFF] to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-xl font-bold shadow-lg shadow-blue-900/30 transform hover:scale-[1.02] transition-all text-center text-sm"
+                                        >
+                                            Editar
+                                        </Link>
+                                    )}
                                     <button
-                                        onClick={() => navigate("/admin/products")}
-                                        className="px-4 py-2.5 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all text-sm"
+                                        onClick={() => navigate(user?.role === 'admin' ? '/admin/products' : '/products')}
+                                        className={`py-2.5 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all text-sm ${user?.role === 'admin' ? 'px-4' : 'flex-1'
+                                            }`}
                                     >
                                         Cerrar
                                     </button>

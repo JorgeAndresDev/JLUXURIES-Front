@@ -37,6 +37,9 @@ const AppRouter = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<ProductsPage />} />
 
+        {/* Public Product Detail - Anyone can view */}
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/cart" element={<Cart />} />
@@ -48,7 +51,6 @@ const AppRouter = () => {
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/create-product" element={<CreateProductPage />} />
             <Route path="/admin/edit-product/:id" element={<EditProductPage />} />
-            <Route path="/admin/product/:id" element={<ProductDetailPage />} />
 
             {/* Admin Clients Routes */}
             <Route path="/admin/clients" element={<AdminClients />} />

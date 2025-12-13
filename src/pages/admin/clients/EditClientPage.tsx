@@ -57,7 +57,7 @@ export default function EditClientPage() {
         setErrorMsg("");
 
         try {
-            await updateClient(Number(id), form);
+
             navigate("/admin/clients");
         } catch (err: any) {
             console.error(err);
@@ -69,8 +69,13 @@ export default function EditClientPage() {
 
     if (loadingData) {
         return (
-            <div className="container mx-auto px-4 pt-24 pb-12">
-                <div className="flex items-center justify-center py-20">
+            <div className="min-h-screen w-full bg-gray-950 text-white pt-20 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                    <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+                </div>
+                <div className="flex items-center justify-center py-20 relative z-10">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E6BFF]"></div>
                 </div>
             </div>
@@ -78,8 +83,13 @@ export default function EditClientPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 pt-24 pb-12">
-            <div className="max-w-3xl mx-auto">
+        <div className="min-h-screen w-full bg-gray-950 text-white pt-20 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+                <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+            </div>
+            <div className="max-w-3xl mx-auto relative z-10">
                 <h1 className="text-4xl font-bold text-white mb-8 tracking-tight">Editar Cliente</h1>
 
                 {errorMsg && (
