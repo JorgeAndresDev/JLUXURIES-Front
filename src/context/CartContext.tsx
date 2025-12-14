@@ -10,6 +10,8 @@ interface CartContextType {
     clearCart: () => Promise<void>;
     loading: boolean;
     total: number;
+    // <--- CORRECCIÓN TS6133 (Añadido al Type)
+    getAvailableStock: (productId: number, productStock: number) => number; 
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -59,7 +61,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const itemInCart = cart.find(item => item.id_producto === productId);
         const quantityInCart = itemInCart?.cantidad || 0;
         return productStock - quantityInCart;
-    };
+    }; // <-- Función que ahora será usada
 
     const addToCart = async (item: Omit<CartItem, 'estado'> & { productStock?: number }) => {
         try {
@@ -140,7 +142,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             removeFromCart,
             clearCart,
             loading,
-            total
+            total,
+            getAvailableStock // <--- CORRECCIÓN TS6133 (Pasado en el value)
         }}>
             {children}
         </CartContext.Provider>
