@@ -2,10 +2,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createClient } from "../../../services/Clients";
 
+// Definimos la interfaz que coincide con la estructura de tu formulario
+// y cumple con la restricción de tipo de la API (TS2345).
+interface ClientForm {
+    nombre: string;
+    email: string;
+    password: string;
+    telefono: string;
+    direccion: string;
+    role: "client" | "admin"; // CLAVE: Solo permite estos dos valores literales
+}
+
 export default function CreateClientPage() {
     const navigate = useNavigate();
 
-    const [form, setForm] = useState({
+    // Inicializamos el estado usando la interfaz ClientForm
+    const [form, setForm] = useState<ClientForm>({
         nombre: "",
         email: "",
         password: "",
@@ -19,7 +31,15 @@ export default function CreateClientPage() {
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        
+        // Manejo específico del rol para asegurar que el tipo se mantenga como literal
+        if (name === 'role') {
+            // Se usa aserción para confirmar a TypeScript que el valor es uno de los literales esperados.
+            setForm({ ...form, role: value as "client" | "admin" });
+        } else {
+            setForm({ ...form, [name]: value });
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +48,8 @@ export default function CreateClientPage() {
         setErrorMsg("");
 
         try {
-            await createClient(form);
+            // El objeto 'form' ya está correctamente tipado (TS2345 resuelto)
+            await createClient(form); 
             setToast({ message: '¡Cliente creado exitosamente!', type: 'success' });
             setTimeout(() => navigate("/admin/clients"), 2000);
         } catch (err: any) {
