@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:9000',
+  baseURL: 'https://jluxuries-api.onrender.com',
 });
 
 api.interceptors.request.use((config) => {
