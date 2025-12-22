@@ -28,7 +28,7 @@ export default function CreateClientPage() {
         setErrorMsg("");
 
         try {
-            await createClient(form);
+            await createClient(form as any);
             setToast({ message: '¡Cliente creado exitosamente!', type: 'success' });
             setTimeout(() => navigate("/admin/clients"), 2000);
         } catch (err: any) {
@@ -47,8 +47,8 @@ export default function CreateClientPage() {
             {toast && (
                 <div className="fixed top-20 right-4 z-50 animate-[slideIn_0.3s_ease-out]">
                     <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-sm border ${toast.type === 'success'
-                            ? 'bg-green-600/90 border-green-400/50 text-white'
-                            : 'bg-red-600/90 border-red-400/50 text-white'
+                        ? 'bg-green-600/90 border-green-400/50 text-white'
+                        : 'bg-red-600/90 border-red-400/50 text-white'
                         }`}>
                         {toast.type === 'success' ? (
                             <svg className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,7 +73,7 @@ export default function CreateClientPage() {
             )}
 
             <div className="max-w-3xl mx-auto">
-                <h1 className="text-4xl font-bold text-white mb-8 tracking-tight">Crear Nuevo Cliente</h1>
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">Crear Nuevo Cliente</h1>
 
                 {errorMsg && (
                     <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm flex items-center gap-2">
@@ -84,30 +84,30 @@ export default function CreateClientPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6 bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl">
+                <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 p-8 rounded-2xl shadow-xl dark:shadow-none">
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1.5">Nombre completo</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nombre completo</label>
                             <input
                                 type="text"
                                 name="nombre"
                                 value={form.nombre}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                                 placeholder="Ej: Juan Pérez"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
                             <input
                                 type="email"
                                 name="email"
                                 value={form.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                                 placeholder="ejemplo@correo.com"
                                 required
                             />
@@ -116,38 +116,38 @@ export default function CreateClientPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1.5">Contraseña</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Contraseña</label>
                             <input
                                 type="password"
                                 name="password"
                                 value={form.password}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                                 placeholder="••••••••"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1.5">Teléfono</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Teléfono</label>
                             <input
                                 type="tel"
                                 name="telefono"
                                 value={form.telefono}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                                 placeholder="Ej: +57 300 123 4567"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5">Rol de Usuario</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Rol de Usuario</label>
                         <select
                             name="role"
                             value={form.role}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white transition-all"
+                            className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white transition-all"
                         >
                             <option value="client" className="bg-gray-900 text-white">Cliente</option>
                             <option value="admin" className="bg-gray-900 text-white">Administrador</option>
@@ -155,12 +155,12 @@ export default function CreateClientPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1.5">Dirección</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Dirección</label>
                         <textarea
                             name="direccion"
                             value={form.direccion}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                            className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                             rows={3}
                             placeholder="Dirección completa..."
                         />
@@ -170,7 +170,7 @@ export default function CreateClientPage() {
                         <button
                             type="button"
                             onClick={() => navigate('/admin/clients')}
-                            className="flex-1 py-3.5 px-4 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all"
+                            className="flex-1 py-3.5 px-4 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-xl font-semibold transition-all"
                         >
                             Cancelar
                         </button>

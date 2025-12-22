@@ -21,11 +21,11 @@ export default function FeaturedProducts() {
   ];
 
   return (
-    <section className="w-full py-16 bg-black text-white">
+    <section className="w-full py-16 bg-white dark:bg-black text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4">
-        
+
         {/* Título */}
-        <h2 className="text-3xl md:text-4xl font-bold mb-10 drop-shadow-[0_0_10px_#1E6BFF]">
+        <h2 className="text-3xl md:text-4xl font-bold mb-10 drop-shadow-[0_0_10px_rgba(30,107,255,0.3)] dark:drop-shadow-[0_0_10px_#1E6BFF]">
           Productos Destacados
         </h2>
 
@@ -35,9 +35,9 @@ export default function FeaturedProducts() {
             <div
               key={p.id}
               className="
-                bg-[#0A0F1C] border border-blue-500/20 rounded-2xl 
-                shadow-[0_0_15px_#1E6BFF20] overflow-hidden
-                hover:shadow-[0_0_25px_#1E6BFF50] 
+                bg-gray-50 dark:bg-[#0A0F1C] border border-gray-200 dark:border-blue-500/20 rounded-2xl 
+                shadow-lg dark:shadow-[0_0_15px_#1E6BFF20] overflow-hidden
+                hover:shadow-xl dark:hover:shadow-[0_0_25px_#1E6BFF50] 
                 transition duration-300 hover:-translate-y-1
               "
             >
@@ -51,12 +51,12 @@ export default function FeaturedProducts() {
               {/* Info */}
               <div className="p-4">
                 <h3 className="text-xl font-bold mb-2">{p.name}</h3>
-                <p className="text-blue-400 font-semibold mb-3">
+                <p className="text-blue-600 dark:text-blue-400 font-semibold mb-3">
                   ${p.price.toLocaleString()}
                 </p>
 
-                <button className="w-full py-2 rounded-xl bg-blue-600/20 border border-blue-500/40 
-                                   hover:bg-blue-600/30 transition shadow-[0_0_10px_#1E6BFF40]">
+                <button className="w-full py-2 rounded-xl bg-blue-50 dark:bg-blue-600/20 border border-blue-200 dark:border-blue-500/40 
+                                   hover:bg-blue-100 dark:hover:bg-blue-600/30 transition shadow-none dark:shadow-[0_0_10px_#1E6BFF40] text-blue-600 dark:text-white font-medium">
                   Ver detalle
                 </button>
               </div>

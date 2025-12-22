@@ -92,7 +92,7 @@ export default function EditProductPage() {
         return (
             <div className="container mx-auto px-4 pt-20 pb-8">
                 <div className="flex items-center justify-center py-16">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E6BFF]"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-[#1E6BFF]"></div>
                 </div>
             </div>
         );
@@ -110,57 +110,57 @@ export default function EditProductPage() {
                     </div>
                 )}
 
-                <div className="space-y-5 bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-                    <h1 className="text-2xl font-bold text-white mb-3 tracking-tight">Editar producto</h1>
+                <div className="space-y-5 bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 p-6 rounded-2xl shadow-xl dark:shadow-none">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">Editar producto</h1>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Nombre del producto</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Nombre del producto</label>
                             <input
                                 type="text"
                                 name="ProductsName"
                                 value={form.ProductsName}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 placeholder="Ej: Casco Integral"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Moto</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Moto</label>
                             <input
                                 type="text"
                                 name="moto"
                                 value={form.moto}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 placeholder="Ej: FZ16"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Categoría</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Categoría</label>
                             <input
                                 type="text"
                                 name="categoria"
                                 value={form.categoria}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 placeholder="Ej: Seguridad"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Color</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Color</label>
                             <input
                                 type="text"
                                 name="color"
                                 value={form.color}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 placeholder="Ej: Negro"
                                 required
                             />
@@ -169,13 +169,13 @@ export default function EditProductPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Precio</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Precio</label>
                             <input
                                 type="number"
                                 name="Price"
                                 value={form.Price}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 min={0}
                                 step="0.01"
                                 required
@@ -183,38 +183,38 @@ export default function EditProductPage() {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Cantidad</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Cantidad</label>
                             <input
                                 type="number"
                                 name="Quantity"
                                 value={form.Quantity}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 min={0}
                                 required
                             />
                         </div>
 
                         <div className="md:col-span-2">
-                            <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">URL de la Imagen</label>
+                            <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">URL de la Imagen</label>
                             <input
                                 type="url"
                                 name="image_url"
                                 value={form.image_url}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm"
+                                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm"
                                 placeholder="https://ejemplo.com/imagen.jpg"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-semibold text-gray-200 mb-2 uppercase tracking-wider">Descripción</label>
+                        <label className="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wider">Descripción</label>
                         <textarea
                             name="Description"
                             value={form.Description}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/20 text-white placeholder-gray-500 transition-all text-sm resize-none"
+                            className="w-full px-4 py-3 bg-gray-50 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/20 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all text-sm resize-none"
                             rows={2}
                             placeholder="Detalles del producto..."
                             required
@@ -225,7 +225,7 @@ export default function EditProductPage() {
                         <button
                             type="button"
                             onClick={() => navigate('/admin/products')}
-                            className="flex-1 py-3 px-4 border border-white/20 hover:border-white/40 hover:bg-white/5 text-white rounded-lg font-semibold transition-all text-sm"
+                            className="flex-1 py-3 px-4 border border-gray-300 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-lg font-semibold transition-all text-sm"
                         >
                             Cancelar
                         </button>
@@ -233,7 +233,7 @@ export default function EditProductPage() {
                             type="submit"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="flex-1 py-3 px-4 bg-black/40 border-2  hover:border-cyan-400 hover:bg-black/60 text-white rounded-lg font-bold shadow-lg shadow-[#1E6BFF]/20 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm tracking-wide"
+                            className="flex-1 py-3 px-4 bg-blue-600 dark:bg-black/40 border border-blue-600 dark:border-2 dark:border-cyan-400 hover:bg-blue-700 dark:hover:bg-black/60 text-white rounded-lg font-bold shadow-lg shadow-blue-900/30 dark:shadow-[#1E6BFF]/20 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-sm tracking-wide"
                         >
                             {loading ? "Actualizando..." : "Actualizar Producto"}
                         </button>

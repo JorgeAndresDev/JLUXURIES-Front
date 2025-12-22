@@ -41,7 +41,7 @@ const AdminClients = () => {
                 accessorKey: "id_cliente",
                 header: "ID",
                 cell: (info) => (
-                    <span className="text-gray-400 font-mono text-sm">
+                    <span className="text-gray-500 dark:text-gray-400 font-mono text-sm">
                         #{info.getValue() as number}
                     </span>
                 ),
@@ -50,7 +50,7 @@ const AdminClients = () => {
                 accessorKey: "nombre",
                 header: "Nombre",
                 cell: (info) => (
-                    <span className="font-semibold text-white">
+                    <span className="font-semibold text-gray-900 dark:text-white">
                         {info.getValue() as string}
                     </span>
                 ),
@@ -59,7 +59,7 @@ const AdminClients = () => {
                 accessorKey: "email",
                 header: "Email",
                 cell: (info) => (
-                    <span className="text-gray-300">
+                    <span className="text-gray-600 dark:text-gray-300">
                         {info.getValue() as string}
                     </span>
                 ),
@@ -68,7 +68,7 @@ const AdminClients = () => {
                 accessorKey: "telefono",
                 header: "Teléfono",
                 cell: (info) => (
-                    <span className="text-gray-300">
+                    <span className="text-gray-600 dark:text-gray-300">
                         {(info.getValue() as string) || "N/A"}
                     </span>
                 ),
@@ -77,7 +77,7 @@ const AdminClients = () => {
                 accessorKey: "role",
                 header: "Rol",
                 cell: (info) => (
-                    <span className={`truncate max-w-xs block font-medium ${(info.getValue() as string) === 'admin' ? 'text-purple-400' : 'text-gray-300'
+                    <span className={`truncate max-w-xs block font-medium ${(info.getValue() as string) === 'admin' ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-300'
                         }`}>
                         {(info.getValue() as string) === 'admin' ? 'Admin' : 'Cliente'}
                     </span>
@@ -169,19 +169,19 @@ const AdminClients = () => {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <h1 className="text-4xl font-bold text-white tracking-tight">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
                     Administrar Clientes
                 </h1>
                 <div className="flex gap-3">
                     <Link
                         to="/admin"
-                        className="px-6 py-3 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all"
+                        className="px-6 py-3 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-xl font-semibold transition-all"
                     >
                         ← Dashboard
                     </Link>
                     <button
                         onClick={() => navigate("/admin/create-client")}
-                        className="px-6 py-3 bg-blue-600/30 border border-blue-500/50 rounded-xl text-white font-semibold hover:shadow-[0_0_20px_#1E6BFF] transition backdrop-blur-md"
+                        className="px-6 py-3 bg-blue-600 border border-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 hover:shadow-lg transition mt-2 sm:mt-0"
                     >
                         Registrar nuevo cliente
                     </button>
@@ -196,7 +196,7 @@ const AdminClients = () => {
                         value={globalFilter ?? ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         placeholder="Buscar clientes por nombre, email, teléfono..."
-                        className="w-full px-5 py-4 pl-12 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/50 text-white placeholder-gray-500 transition-all"
+                        className="w-full px-5 py-4 pl-12 bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                     />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +216,7 @@ const AdminClients = () => {
             </div>
 
             {/* Table */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+            <div className="bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl dark:shadow-none">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E6BFF]"></div>
@@ -239,18 +239,18 @@ const AdminClients = () => {
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <tr
                                             key={headerGroup.id}
-                                            className="border-b border-white/10 bg-white/5"
+                                            className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5"
                                         >
                                             {headerGroup.headers.map((header) => (
                                                 <th
                                                     key={header.id}
-                                                    className="px-6 py-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider"
+                                                    className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
                                                 >
                                                     {header.isPlaceholder ? null : (
                                                         <div
                                                             className={
                                                                 header.column.getCanSort()
-                                                                    ? "cursor-pointer select-none flex items-center gap-2 hover:text-white transition-colors"
+                                                                    ? "cursor-pointer select-none flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors"
                                                                     : ""
                                                             }
                                                             onClick={header.column.getToggleSortingHandler()}
@@ -278,7 +278,7 @@ const AdminClients = () => {
                                     {table.getRowModel().rows.map((row) => (
                                         <tr
                                             key={row.id}
-                                            className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                                            className="border-b border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
                                         >
                                             {row.getVisibleCells().map((cell) => (
                                                 <td key={cell.id} className="px-6 py-4">

@@ -54,8 +54,8 @@ export default function CreateProductPage() {
       {toast && (
         <div className="fixed top-20 right-4 z-50 animate-[slideIn_0.3s_ease-out]">
           <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-sm border ${toast.type === 'success'
-              ? 'bg-green-600/90 border-green-400/50 text-white'
-              : 'bg-red-600/90 border-red-400/50 text-white'
+            ? 'bg-green-600/90 border-green-400/50 text-white'
+            : 'bg-red-600/90 border-red-400/50 text-white'
             }`}>
             {toast.type === 'success' ? (
               <svg className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,7 +80,7 @@ export default function CreateProductPage() {
       )}
 
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-8 tracking-tight">Crear Nuevo Producto</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">Crear Nuevo Producto</h1>
 
         {errorMsg && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm flex items-center gap-2">
@@ -91,42 +91,42 @@ export default function CreateProductPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-2xl">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 p-8 rounded-2xl shadow-xl dark:shadow-none">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Nombre del producto</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nombre del producto</label>
               <input
                 type="text"
                 name="ProductsName"
                 value={form.ProductsName}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="Ej: Casco Integral"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Moto del producto</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Moto del producto</label>
               <input
                 type="text"
                 name="moto"
                 value={form.moto}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="Ej: Honda XR150"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Categoría</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Categoría</label>
               <input
                 type="text"
                 name="categoria"
                 value={form.categoria}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="Ej: Seguridad"
                 required
               />
@@ -135,13 +135,13 @@ export default function CreateProductPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Precio</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Precio</label>
               <input
                 type="number"
                 name="Price"
                 value={form.Price}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 min={0}
                 step="0.01"
                 required
@@ -149,26 +149,26 @@ export default function CreateProductPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Cantidad</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Cantidad</label>
               <input
                 type="number"
                 name="Quantity"
                 value={form.Quantity}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 min={0}
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Color</label>
               <input
                 type="text"
                 name="color"
                 value={form.color}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="Ej: Negro"
                 required
               />
@@ -176,24 +176,24 @@ export default function CreateProductPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">URL de la Imagen</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">URL de la Imagen</label>
             <input
               type="url"
               name="image_url"
               value={form.image_url}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
               placeholder="https://ejemplo.com/imagen.jpg"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1.5">Descripción</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Descripción</label>
             <textarea
               name="Description"
               value={form.Description}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-1 focus:ring-[#1E6BFF] text-white placeholder-gray-500 transition-all"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
               rows={4}
               placeholder="Detalles del producto..."
               required

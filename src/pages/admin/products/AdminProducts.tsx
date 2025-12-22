@@ -43,7 +43,7 @@ const AdminProducts = () => {
                 accessorKey: "idProducts",
                 header: "ID",
                 cell: (info) => (
-                    <span className="text-gray-400 font-mono text-sm">
+                    <span className="text-gray-500 dark:text-gray-400 font-mono text-sm">
                         #{info.getValue() as number}
                     </span>
                 ),
@@ -53,7 +53,7 @@ const AdminProducts = () => {
                 header: "Nombre",
                 cell: (info) => (
                     <div className="flex items-center gap-3">
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold text-gray-900 dark:text-white">
                             {info.getValue() as string}
                         </span>
                     </div>
@@ -64,7 +64,7 @@ const AdminProducts = () => {
                 header: "Moto",
                 cell: (info) => (
                     <div className="flex items-center gap-3">
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold text-gray-900 dark:text-white">
                             {info.getValue() as string}
                         </span>
                     </div>
@@ -83,7 +83,7 @@ const AdminProducts = () => {
                 accessorKey: "Price",
                 header: "Precio",
                 cell: (info) => (
-                    <span className="text-green-400 font-semibold">
+                    <span className="text-green-600 dark:text-green-400 font-semibold">
                         ${(info.getValue() as number).toFixed(2)}
                     </span>
                 ),
@@ -111,7 +111,7 @@ const AdminProducts = () => {
                 accessorKey: "color",
                 header: "Color",
                 cell: (info) => (
-                    <span className="text-gray-300">{info.getValue() as string}</span>
+                    <span className="text-gray-600 dark:text-gray-300">{info.getValue() as string}</span>
                 ),
             },
             {
@@ -122,7 +122,7 @@ const AdminProducts = () => {
                         {/* Ver */}
                         <button
                             onClick={() =>
-                                navigate(`/product/${info.row.original.idProducts}`)
+                                navigate(`/product/${info.row.original.idProducts}`, { state: { from: '/admin/products' } })
                             }
                             className="p-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-400 rounded-lg transition-all border border-purple-500/30 hover:border-purple-500/50"
                         >
@@ -201,19 +201,19 @@ const AdminProducts = () => {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <h1 className="text-4xl font-bold text-white tracking-tight">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">
                     Administrar Productos
                 </h1>
                 <div className="flex gap-3">
                     <Link
                         to="/admin"
-                        className="px-6 py-3 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all"
+                        className="px-6 py-3 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-xl font-semibold transition-all"
                     >
                         ← Dashboard
                     </Link>
                     <button
                         onClick={() => navigate("/admin/create-product")}
-                        className="px-6 py-3 bg-blue-600/30 border border-blue-500/50 rounded-xl text-white font-semibold hover:shadow-[0_0_20px_#1E6BFF] transition backdrop-blur-md"
+                        className="px-6 py-3 bg-blue-600 border border-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 hover:shadow-lg transition mt-2 sm:mt-0"
                     >
                         Crear nuevo producto
                     </button>
@@ -228,7 +228,7 @@ const AdminProducts = () => {
                         value={globalFilter ?? ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         placeholder="Buscar productos por nombre, categoría, color..."
-                        className="w-full px-5 py-4 pl-12 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl focus:outline-none focus:border-[#1E6BFF] focus:ring-2 focus:ring-[#1E6BFF]/50 text-white placeholder-gray-500 transition-all"
+                        className="w-full px-5 py-4 pl-12 bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-[#1E6BFF]/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                     />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -248,7 +248,7 @@ const AdminProducts = () => {
             </div>
 
             {/* Table */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+            <div className="bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl dark:shadow-none">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E6BFF]"></div>
@@ -271,18 +271,18 @@ const AdminProducts = () => {
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <tr
                                             key={headerGroup.id}
-                                            className="border-b border-white/10 bg-white/5"
+                                            className="border-b border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5"
                                         >
                                             {headerGroup.headers.map((header) => (
                                                 <th
                                                     key={header.id}
-                                                    className="px-6 py-4 text-left text-sm font-semibold text-gray-300 uppercase tracking-wider"
+                                                    className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider"
                                                 >
                                                     {header.isPlaceholder ? null : (
                                                         <div
                                                             className={
                                                                 header.column.getCanSort()
-                                                                    ? "cursor-pointer select-none flex items-center gap-2 hover:text-white transition-colors"
+                                                                    ? "cursor-pointer select-none flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors"
                                                                     : ""
                                                             }
                                                             onClick={header.column.getToggleSortingHandler()}

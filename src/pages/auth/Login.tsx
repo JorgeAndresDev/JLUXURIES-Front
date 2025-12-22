@@ -48,7 +48,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-gray-950 text-white">
+    <div className="min-h-screen w-full flex bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
       {/* Left Side - Image/Brand (Hidden on mobile, visible on lg) */}
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
@@ -71,37 +71,37 @@ const Login = () => {
             <img src="/src/assets/Logo.png" alt="JLUXURIES" className="w-32 h-auto mx-auto" />
           </div>
 
-          <h2 className="text-3xl font-bold mb-2">Bienvenido de nuevo</h2>
-          <p className="text-gray-400 mb-8">Ingresa tus credenciales para acceder a tu cuenta.</p>
+          <h2 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Bienvenido de nuevo</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">Ingresa tus credenciales para acceder a tu cuenta.</p>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm flex items-center gap-2">
+            <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/50 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg mb-6 text-sm flex items-center gap-2">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3.5 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="nombre@ejemplo.com"
                 required
               />
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-sm font-medium text-gray-300">Contraseña</label>
-                <a href="#" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">¿Olvidaste tu contraseña?</a>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                <a href="#" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">¿Olvidaste tu contraseña?</a>
               </div>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-white placeholder-gray-500 transition-all"
+                className="w-full px-4 py-3.5 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:border-blue-500 dark:focus:border-[#1E6BFF] focus:ring-1 focus:ring-blue-500 dark:focus:ring-[#1E6BFF] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -109,15 +109,15 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-3.5 px-4 bg-blue-600/30 border border-blue-500/50 rounded-xl text-white font-semibold hover:shadow-[0_0_20px_#1E6BFF] transition-all duration-200 backdrop-blur-md mt-2"
+              className="w-full py-3.5 px-4 bg-blue-600 border border-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 hover:shadow-lg transition-all duration-200 mt-2"
             >
               Iniciar Sesión
             </button>
           </form>
 
-          <div className="mt-8 text-center text-sm text-gray-400">
+          <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             ¿No tienes una cuenta?{' '}
-            <Link to="/register" className="text-white font-semibold hover:text-blue-400 transition-colors">
+            <Link to="/register" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-[#1E6BFF] transition-colors">
               Regístrate ahora
             </Link>
           </div>

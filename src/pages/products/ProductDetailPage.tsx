@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { getItem } from "../../services/Products";
 import type { Product } from "../../types";
 import { useCart } from "../../context/CartContext";
@@ -8,18 +8,30 @@ import { useAuth } from "../../context/AuthContext";
 export default function ProductDetailPage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { addToCart } = useCart();
     const { isAuthenticated, user } = useAuth();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [backPath, setBackPath] = useState<string>("");
 
     useEffect(() => {
         fetchProduct();
         // Scroll to top when page loads or product changes
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [id]);
+
+        // Determine the back path based on navigation state or user role
+        const from = (location.state as any)?.from;
+        if (from) {
+            setBackPath(from);
+        } else if (user?.role === 'admin') {
+            setBackPath('/admin/products');
+        } else {
+            setBackPath('/');
+        }
+    }, [id, location, user]);
 
     const fetchProduct = async () => {
         try {
@@ -100,7 +112,7 @@ export default function ProductDetailPage() {
                         <p className="text-lg font-semibold">{error || "Producto no encontrado"}</p>
                     </div>
                     <Link
-                        to="/admin/products"
+                        to={backPath || (user?.role === 'admin' ? '/admin/products' : '/')}
                         className="inline-flex items-center gap-2 text-[#1E6BFF] hover:text-blue-400 font-semibold"
                     >
                         ← Volver a productos
@@ -111,7 +123,7 @@ export default function ProductDetailPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 pt-16 pb-4">
+        <div className="container mx-auto px-4 pt-24 pb-4">
             {/* Toast Notification */}
             {/* Toast Notification - Optimized */}
             {toast && (
@@ -146,30 +158,30 @@ export default function ProductDetailPage() {
                 {/* Header - Más compacto */}
                 <div className="mb-3">
                     <Link
-                        to="/admin/products"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+                        to={backPath || (user?.role === 'admin' ? '/admin/products' : '/')}
+                        className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors text-sm"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                         </svg>
                         Volver a productos
                     </Link>
-                    <h1 className="text-xl font-bold text-white tracking-tight mt-1">Detalles del Producto</h1>
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight mt-1">Detalles del Producto</h1>
                 </div>
 
                 {/* Two Cards Layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
                     {/* Card 1: Image */}
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden p-3 md:p-4">
-                        <div className="flex items-center justify-center bg-black/20 rounded-xl border border-white/10 h-[280px] md:h-[400px]">
+                    <div className="bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden p-3 md:p-4 shadow-sm dark:shadow-none">
+                        <div className="flex items-center justify-center bg-gray-50 dark:bg-black/20 rounded-xl border border-gray-100 dark:border-white/10 h-[280px] md:h-[400px]">
                             {product.image_url ? (
                                 <img
                                     src={product.image_url}
                                     alt={product.ProductsName}
-                                    className="max-w-full max-h-full object-contain rounded-lg"
+                                    className="max-w-full max-h-full object-contain rounded-lg shadow-sm dark:shadow-none"
                                 />
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-gray-500">
+                                <div className="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
@@ -180,32 +192,32 @@ export default function ProductDetailPage() {
                     </div>
 
                     {/* Card 2: Information */}
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden p-4">
+                    <div className="bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden p-4 shadow-sm dark:shadow-none">
                         <div className="space-y-3">
                             {/* Product Name */}
                             <div>
-                                <h2 className="text-2xl font-bold text-white mb-2">{product.ProductsName}</h2>
-                                <span className="inline-block px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs font-medium border border-purple-500/30">
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{product.ProductsName}</h2>
+                                <span className="inline-block px-3 py-1 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-300 rounded-full text-xs font-medium border border-purple-200 dark:border-purple-500/30">
                                     {product.categoria}
                                 </span>
                             </div>
 
                             {/* Price */}
-                            <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-3">
-                                <p className="text-xs text-gray-400">Precio</p>
-                                <p className="text-3xl font-bold text-green-400">${product.Price.toFixed(2)}</p>
+                            <div className="bg-gradient-to-r from-green-50 dark:from-green-500/10 to-emerald-50 dark:to-emerald-500/10 border border-green-200 dark:border-green-500/30 rounded-xl p-3">
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Precio</p>
+                                <p className="text-3xl font-bold text-green-600 dark:text-green-400">${product.Price.toFixed(2)}</p>
                             </div>
 
                             {/* Stock, Color, and ID */}
                             <div className="grid grid-cols-3 gap-2">
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-2">
-                                    <p className="text-xs text-gray-400 mb-1">Stock</p>
+                                <div className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Stock</p>
                                     <span
                                         className={`inline-block px-2 py-1 rounded text-xs font-bold ${product.Quantity > 10
-                                            ? "bg-green-500/20 text-green-400"
+                                            ? "bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400"
                                             : product.Quantity > 0
-                                                ? "bg-yellow-500/20 text-yellow-400"
-                                                : "bg-red-500/20 text-red-400"
+                                                ? "bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400"
+                                                : "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400"
                                             }`}
                                     >
                                         {product.Quantity > 10
@@ -216,22 +228,22 @@ export default function ProductDetailPage() {
                                     </span>
                                 </div>
 
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-2">
-                                    <p className="text-xs text-gray-400 mb-1">Color</p>
-                                    <p className="text-sm font-semibold text-white truncate">{product.color}</p>
+                                <div className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Color</p>
+                                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{product.color}</p>
                                 </div>
 
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-2">
-                                    <p className="text-xs text-gray-400 mb-1">ID</p>
-                                    <p className="text-sm font-mono text-gray-300">#{product.idProducts}</p>
+                                <div className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl p-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">ID</p>
+                                    <p className="text-sm font-mono text-gray-600 dark:text-gray-300">#{product.idProducts}</p>
                                 </div>
                             </div>
 
                             {/* Description */}
                             {product.Description && (
-                                <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-                                    <p className="text-xs text-gray-400 mb-2">Descripción</p>
-                                    <p className="text-sm text-gray-300 leading-relaxed">
+                                <div className="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl p-3">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Descripción</p>
+                                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                                         {product.Description}
                                     </p>
                                 </div>
@@ -244,7 +256,7 @@ export default function ProductDetailPage() {
                                     onClick={handleAddToCart}
                                     disabled={product.Quantity <= 0}
                                     className={`w-full py-3 px-4 rounded-xl font-bold shadow-lg transform transition-all duration-150 flex items-center justify-center gap-2 ${product.Quantity <= 0
-                                        ? 'bg-gray-600 cursor-not-allowed opacity-50'
+                                        ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed opacity-50'
                                         : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-green-900/30 hover:scale-[1.02]'
                                         } text-white`}
                                 >
@@ -265,8 +277,20 @@ export default function ProductDetailPage() {
                                         </Link>
                                     )}
                                     <button
-                                        onClick={() => navigate(user?.role === 'admin' ? '/admin/products' : '/products')}
-                                        className={`py-2.5 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all text-sm ${user?.role === 'admin' ? 'px-4' : 'flex-1'
+                                        onClick={() => {
+                                            const destination = backPath || (user?.role === 'admin' ? '/admin/products' : '/');
+                                            navigate(destination);
+                                            // If going back to home, scroll to carousel after navigation
+                                            if (destination === '/') {
+                                                setTimeout(() => {
+                                                    const carousel = document.getElementById('productos-carousel');
+                                                    if (carousel) {
+                                                        carousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                                    }
+                                                }, 100);
+                                            }
+                                        }}
+                                        className={`py-2.5 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-xl font-semibold transition-all text-sm ${user?.role === 'admin' ? 'px-4' : 'flex-1'
                                             }`}
                                     >
                                         Cerrar

@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="w-full mt-12 md:mt-20 bg-black/90 border-t border-blue-500/20 shadow-[0_0_20px_#1E6BFF20]">
-      <div className="flex justify-center items-center flex-col max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10 text-center text-white">
+    <footer className="w-full mt-12 md:mt-20 bg-gray-50 dark:bg-black/90 border-t border-gray-200 dark:border-blue-500/20 shadow-inner dark:shadow-[0_0_20px_#1E6BFF20] transition-colors duration-300">
+      <div className="flex justify-center items-center flex-col max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-10 text-center text-gray-900 dark:text-white">
 
         {/* Línea de luz */}
         <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent mb-4 md:mb-6 opacity-60"></div>

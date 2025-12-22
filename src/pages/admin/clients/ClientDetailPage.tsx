@@ -31,7 +31,7 @@ export default function ClientDetailPage() {
         return (
             <div className="container mx-auto px-4 pt-24 pb-12">
                 <div className="flex items-center justify-center py-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1E6BFF]"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-[#1E6BFF]"></div>
                 </div>
             </div>
         );
@@ -46,7 +46,7 @@ export default function ClientDetailPage() {
                     </div>
                     <Link
                         to="/admin/clients"
-                        className="inline-flex items-center gap-2 text-[#1E6BFF] hover:text-blue-400 font-semibold"
+                        className="inline-flex items-center gap-2 text-blue-600 dark:text-[#1E6BFF] hover:text-blue-500 dark:hover:text-blue-400 font-semibold"
                     >
                         ← Volver a clientes
                     </Link>
@@ -62,50 +62,51 @@ export default function ClientDetailPage() {
                 <div className="mb-8">
                     <Link
                         to="/admin/clients"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-4"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                         </svg>
                         Volver a clientes
                     </Link>
-                    <h1 className="text-4xl font-bold text-white tracking-tight">Detalles del Cliente</h1>
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white tracking-tight">Detalles del Cliente</h1>
                 </div>
 
                 {/* Client Card */}
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+                <div className="bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl dark:shadow-none">
                     <div className="p-8">
                         {/* Avatar and Name */}
-                        <div className="flex items-center gap-6 mb-8 pb-8 border-b border-white/10">
-                            <div className="h-24 w-24 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-lg ring-4 ring-white/10">
+                        <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-200 dark:border-white/10">
+                            <div className="h-24 w-24 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-lg ring-4 ring-gray-100 dark:ring-white/10">
                                 {client.nombre.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                                <h2 className="text-3xl font-bold text-white mb-2">{client.nombre}</h2>
-                                <p className="text-gray-400 text-lg">{client.email}</p>
+                                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{client.nombre}</h2>
+                                <p className="text-gray-500 dark:text-gray-400 text-lg">{client.email}</p>
                             </div>
                         </div>
 
                         {/* Details Grid */}
+                        {/* Details Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                                <p className="text-sm text-gray-400 mb-2">ID del Cliente</p>
-                                <p className="text-lg font-mono text-gray-300">#{client.id_cliente}</p>
+                            <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-6">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">ID del Cliente</p>
+                                <p className="text-lg font-mono text-gray-700 dark:text-gray-300">#{client.id_cliente}</p>
                             </div>
 
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                                <p className="text-sm text-gray-400 mb-2">Email</p>
-                                <p className="text-lg font-semibold text-white break-all">{client.email}</p>
+                            <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-6">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Email</p>
+                                <p className="text-lg font-semibold text-gray-900 dark:text-white break-all">{client.email}</p>
                             </div>
 
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                                <p className="text-sm text-gray-400 mb-2">Teléfono</p>
-                                <p className="text-lg font-semibold text-white">{client.telefono || "No registrado"}</p>
+                            <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-6">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Teléfono</p>
+                                <p className="text-lg font-semibold text-gray-900 dark:text-white">{client.telefono || "No registrado"}</p>
                             </div>
 
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                                <p className="text-sm text-gray-400 mb-2">Dirección</p>
-                                <p className="text-lg font-semibold text-white">{client.direccion || "No registrada"}</p>
+                            <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-6">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Dirección</p>
+                                <p className="text-lg font-semibold text-gray-900 dark:text-white">{client.direccion || "No registrada"}</p>
                             </div>
                         </div>
 
@@ -113,13 +114,13 @@ export default function ClientDetailPage() {
                         <div className="flex gap-3 pt-4">
                             <Link
                                 to={`/admin/edit-client/${client.id_cliente}`}
-                                className="flex-1 py-3.5 px-4 bg-gradient-to-r from-[#1E6BFF] to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-xl font-bold shadow-lg shadow-blue-900/30 transform hover:scale-[1.02] transition-all text-center"
+                                className="flex-1 py-3.5 px-4 bg-blue-600 dark:bg-gradient-to-r dark:from-[#1E6BFF] dark:to-blue-700 hover:bg-blue-700 dark:hover:from-blue-600 dark:hover:to-blue-800 text-white rounded-xl font-bold shadow-lg shadow-blue-900/30 transform hover:scale-[1.02] transition-all text-center"
                             >
                                 Editar Cliente
                             </Link>
                             <button
                                 onClick={() => navigate("/admin/clients")}
-                                className="px-6 py-3.5 border border-white/10 hover:bg-white/5 text-white rounded-xl font-semibold transition-all"
+                                className="px-6 py-3.5 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white rounded-xl font-semibold transition-all"
                             >
                                 Cerrar
                             </button>

@@ -78,9 +78,9 @@ const Cart = () => {
     return (
       <div className="container mx-auto px-4 pt-20 pb-12">
         <div className="text-center py-16">
-          <h2 className="text-3xl font-bold text-white mb-4">Tu carrito está vacío</h2>
-          <p className="text-gray-400 mb-8">Parece que aún no has agregado nada.</p>
-          <Link to="/products" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-150">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Tu carrito está vacío</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">Parece que aún no has agregado nada.</p>
+          <Link to="/products" className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-150 shadow-lg shadow-purple-600/30">
             Explorar Colección
           </Link>
         </div>
@@ -90,7 +90,7 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto px-4 pt-20 pb-12">
-      <h1 className="text-3xl font-bold text-white mb-8 tracking-tight">Tu Carrito</h1>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">Tu Carrito</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         {/* Cart Items */}
@@ -98,11 +98,11 @@ const Cart = () => {
           {cart.map((item, index) => (
             <div
               key={index}
-              className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-[#1E6BFF]/50 hover:bg-white/10 transition-all duration-150 cursor-pointer group"
+              className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-blue-500/50 dark:hover:border-[#1E6BFF]/50 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-150 cursor-pointer group shadow-sm dark:shadow-none"
               onClick={() => navigate(`/product/${item.id_producto}`)}
             >
               <div className="flex items-center space-x-4 w-full sm:w-auto">
-                <div className="h-20 w-20 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-white/10 group-hover:border-[#1E6BFF]/30 transition-colors">
+                <div className="h-20 w-20 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200 dark:border-white/10 group-hover:border-blue-400 dark:group-hover:border-[#1E6BFF]/30 transition-colors">
                   {item.image_url ? (
                     <img
                       src={item.image_url}
@@ -110,22 +110,22 @@ const Cart = () => {
                       className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-150"
                     />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-purple-600/20 to-blue-600/20">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-purple-100 dark:from-purple-600/20 to-blue-100 dark:to-blue-600/20">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1 group-hover:text-[#1E6BFF] transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-[#1E6BFF] transition-colors">
                     {item.ProductsName || `Producto #${item.id_producto}`}
                   </h3>
                   {item.categoria && (
-                    <p className="text-xs text-purple-400 mb-1">{item.categoria}</p>
+                    <p className="text-xs text-purple-600 dark:text-purple-400 mb-1">{item.categoria}</p>
                   )}
-                  <p className="text-gray-400 text-sm">Cantidad: <span className="text-white font-medium">{item.cantidad}</span></p>
-                  <p className="text-[#1E6BFF] font-bold text-base mt-1">${item.precio_unitario.toLocaleString()}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Cantidad: <span className="text-gray-900 dark:text-white font-medium">{item.cantidad}</span></p>
+                  <p className="text-blue-600 dark:text-[#1E6BFF] font-bold text-base mt-1">${item.precio_unitario.toLocaleString()}</p>
                 </div>
               </div>
               <button
@@ -133,7 +133,7 @@ const Cart = () => {
                   e.stopPropagation();
                   handleRemoveItem(item.id_producto, item.ProductsName || `Producto #${item.id_producto}`);
                 }}
-                className="text-gray-400 hover:text-red-400 p-2 rounded-full hover:bg-red-400/10 transition-all duration-150 self-end sm:self-center"
+                className="bg-transparent dark:bg-transparent text-gray-900 hover:text-red-700 dark:text-gray-400 dark:hover:text-red-400 p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-400/10 transition-all duration-150 self-end sm:self-center"
                 title="Eliminar"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,30 +146,30 @@ const Cart = () => {
 
         {/* Summary */}
         <div className="lg:col-span-4">
-          <div className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl p-8 sticky top-24">
-            <h3 className="text-2xl font-bold text-white mb-6">Resumen del Pedido</h3>
+          <div className="bg-white dark:bg-white/5 backdrop-blur-md border border-gray-200 dark:border-white/20 rounded-2xl p-8 sticky top-24 shadow-md dark:shadow-none">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Resumen del Pedido</h3>
             <div className="space-y-4 mb-6">
-              <div className="flex justify-between text-gray-300">
+              <div className="flex justify-between text-gray-600 dark:text-gray-300">
                 <span>Subtotal</span>
                 <span className="font-medium">${total.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-gray-300">
+              <div className="flex justify-between text-gray-600 dark:text-gray-300">
                 <span>Envío</span>
-                <span className="text-green-400 font-medium">Gratis</span>
+                <span className="text-green-600 dark:text-green-400 font-medium">Gratis</span>
               </div>
             </div>
-            <div className="border-t border-white/10 pt-6 mb-8">
+            <div className="border-t border-gray-200 dark:border-white/10 pt-6 mb-8">
               <div className="flex justify-between items-end">
-                <span className="text-gray-300">Total</span>
-                <span className="text-3xl font-bold text-white">${total.toLocaleString()}</span>
+                <span className="text-gray-600 dark:text-gray-300">Total</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">${total.toLocaleString()}</span>
               </div>
             </div>
-            <button className="w-full bg-gradient-to-r from-[#1E6BFF] to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-900/30 transform hover:scale-[1.02]">
+            <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-blue-600/30 transform hover:scale-[1.02]">
               Proceder al Pago
             </button>
             <button
               onClick={handleClearCart}
-              className="w-full mt-4 border border-white/10 hover:bg-white/5 text-gray-400 hover:text-white font-medium py-3 rounded-xl transition-all text-sm"
+              className="w-full mt-4 border border-gray-300 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-900 dark:text-gray-400 hover:text-black dark:hover:text-white font-medium py-3 rounded-xl transition-all text-sm"
             >
               Vaciar Carrito
             </button>

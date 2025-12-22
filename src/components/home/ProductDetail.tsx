@@ -47,21 +47,21 @@ const ProductDetail = ({ product, isOpen, onClose }: ProductDetailProps) => {
       {/* Modal */}
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 
                       w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto">
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border-2 border-[#1E6BFF] 
-                       shadow-[0_0_50px_#1E6BFF] overflow-hidden">
+        <div className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 rounded-2xl border-2 border-gray-100 dark:border-[#1E6BFF] 
+                       shadow-xl dark:shadow-[0_0_50px_#1E6BFF] overflow-hidden">
 
           {/* Header */}
-          <div className="relative p-6 border-b border-[#1E6BFF]/30">
-            <h2 className="text-3xl font-bold text-white text-center drop-shadow-[0_0_10px_#1E6BFF]">
+          <div className="relative p-6 border-b border-gray-100 dark:border-[#1E6BFF]/30">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center dark:drop-shadow-[0_0_10px_#1E6BFF]">
               {product.ProductsName}
             </h2>
 
             {/* Botón cerrar */}
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 bg-red-500/20 hover:bg-red-500/30 
-                         text-white p-2 rounded-full border border-red-500
-                         hover:shadow-[0_0_15px_#EF4444] transition-all duration-300"
+              className="absolute right-4 top-4 bg-gray-100 hover:bg-gray-200 dark:bg-red-500/20 dark:hover:bg-red-500/30 
+                         text-gray-500 hover:text-red-500 dark:text-white p-2 rounded-full border border-gray-200 dark:border-red-500
+                         dark:hover:shadow-[0_0_15px_#EF4444] transition-all duration-300"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
