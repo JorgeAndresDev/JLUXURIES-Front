@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:9000',
+  baseURL: 'https://jluxuries-api-23c9.vercel.app',
 });
 
 api.interceptors.request.use((config) => {

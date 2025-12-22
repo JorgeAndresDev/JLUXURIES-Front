@@ -1,7 +1,6 @@
 import logo from '../../assets/Logo.png';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import RotatingText from '../common/RotatingText';
 
 export default function Hero() {
   const { isAuthenticated } = useAuth();
