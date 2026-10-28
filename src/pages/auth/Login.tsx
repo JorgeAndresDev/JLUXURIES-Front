@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [searchParams] = useSearchParams();
+  const [error, setError] = useState(
+    () => searchParams.get('expired') === '1'
+      ? 'Tu sesi\u00f3n expir\u00f3. Inicia sesi\u00f3n nuevamente.'
+      : ''
+  );
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -41,9 +47,10 @@ const Login = () => {
       console.log('User object to save:', userObject);
       login(access_token, userObject);
       navigate('/');
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.response?.data?.detail || 'Error al iniciar sesión');
+      const detail = axios.isAxiosError(err) ? err.response?.data?.detail : undefined;
+      setError(typeof detail === 'string' ? detail : 'Error al iniciar sesi\u00f3n');
     }
   };
 

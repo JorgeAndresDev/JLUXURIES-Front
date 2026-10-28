@@ -1,12 +1,17 @@
-import React, { createContext, useState, useEffect, type ReactNode, useContext } from 'react';
+import React, { createContext, useState, useEffect, useCallback, type ReactNode, useContext } from 'react';
 import api from '../api/axios';
 import type { User } from '../types';
+import {
+  clearStoredSession,
+  getTokenExpiresAt,
+  isTokenExpired,
+} from '../utils/authSession';
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (token: string, user: User) => void;
-  register: (userData: any) => Promise<void>;
+  register: (userData: unknown) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
@@ -19,6 +24,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [loading, setLoading] = useState<boolean>(true);
 
+  const logout = useCallback(() => {
+    clearStoredSession();
+    setToken(null);
+    setUser(null);
+  }, []);
+
   useEffect(() => {
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
@@ -26,36 +37,72 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       console.log('Checking auth...', { storedToken: !!storedToken, storedUser });
 
-      if (storedToken) {
-        try {
-          // First, try to load user from localStorage
-          if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            console.log('Loaded user from localStorage:', parsedUser);
-            setUser(parsedUser);
-            setToken(storedToken);
-          } else {
-            // If no stored user, try to get from backend
-            const response = await api.get('/auth/me');
-            console.log('Response from /auth/me:', response.data);
+      if (!storedToken || isTokenExpired(storedToken)) {
+        clearStoredSession();
+        setToken(null);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
 
-            if (typeof response.data === 'string') {
-              setUser({ email: response.data, role: 'client' }); // Default role if string
-            } else if (typeof response.data === 'object') {
-              setUser(response.data);
-              localStorage.setItem('user', JSON.stringify(response.data));
-            }
-            setToken(storedToken);
+      try {
+        // First, try to load user from localStorage
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          console.log('Loaded user from localStorage:', parsedUser);
+          setUser(parsedUser);
+          setToken(storedToken);
+        } else {
+          // If no stored user, try to get from backend
+          const response = await api.get('/auth/me');
+          console.log('Response from /auth/me:', response.data);
+
+          if (typeof response.data === 'string') {
+            setUser({ email: response.data, role: 'client' }); // Default role if string
+          } else if (typeof response.data === 'object') {
+            setUser(response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
           }
-        } catch (error) {
-          console.error("Error verifying token", error);
-          logout();
+          setToken(storedToken);
         }
+      } catch (error) {
+        console.error("Error verifying token", error);
+        logout();
       }
       setLoading(false);
     };
     checkAuth();
-  }, []);
+  }, [logout]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const expiresAt = getTokenExpiresAt(token);
+    const maxDelay = 2147483647;
+
+    const expireSession = () => {
+      logout();
+      if (window.location.pathname !== '/login') {
+        window.location.replace('/login?expired=1');
+      }
+    };
+
+    let timeoutId = 0;
+    const scheduleExpiry = () => {
+      const remaining = expiresAt === null ? 0 : expiresAt - Date.now();
+      if (remaining <= 0) {
+        expireSession();
+        return;
+      }
+      timeoutId = window.setTimeout(
+        scheduleExpiry,
+        Math.min(remaining, maxDelay),
+      );
+    };
+
+    timeoutId = window.setTimeout(scheduleExpiry, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, [token, logout]);
 
   const login = (newToken: string, newUser: User) => {
     localStorage.setItem('token', newToken);
@@ -64,21 +111,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(newUser);
   };
 
-  const register = async (userData: any) => {
-    try {
-      await api.post('/auth/register', userData);
-      // Optionally auto-login or redirect to login
-    } catch (error) {
-      throw error;
-    }
+  const register = async (userData: unknown) => {
+    await api.post('/auth/register', userData);
   }
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setToken(null);
-    setUser(null);
-  };
 
   return (
     <AuthContext.Provider value={{
