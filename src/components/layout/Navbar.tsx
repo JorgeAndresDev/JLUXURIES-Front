@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import { Truck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import ThemeToggle from '../common/ThemeToggle';
@@ -100,6 +101,7 @@ const Navbar = () => {
                   {isUserMenuOpen && (
                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.12 }} className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black/5 dark:ring-white/10 focus:outline-none z-50">
                       {user?.role === 'admin' && (<Link to="/admin" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" onClick={() => setIsUserMenuOpen(false)}>Admin</Link>)}
+                      {user?.role === 'admin' && (<Link to="/admin/envios" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" onClick={() => setIsUserMenuOpen(false)}>Envíos</Link>)}
                       <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors" onClick={() => setIsUserMenuOpen(false)}>Perfil</Link>
                       <div className="border-t border-gray-100 dark:border-white/10 my-1"></div>
                       <button onClick={() => { setIsUserMenuOpen(false); handleLogout(); }} className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-white/5 transition-colors">Cerrar Sesión</button>
@@ -194,6 +196,14 @@ const Navbar = () => {
                           <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 text-lg py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 dark:text-gray-300" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a2 2 0 012-2h10a2 2 0 012 2v2h-2V4H5v12h6v2H5a2 2 0 01-2-2V4z" /></svg>
                             <span>Admin</span>
+                          </Link>
+                        </motion.div>
+                      )}
+                      {user?.role === 'admin' && (
+                        <motion.div variants={itemVariants}>
+                          <Link to="/admin/envios" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-gray-700 dark:text-gray-300 text-lg py-3">
+                            <Truck className="h-5 w-5 text-gray-500 dark:text-gray-300" />
+                            <span>Envíos</span>
                           </Link>
                         </motion.div>
                       )}

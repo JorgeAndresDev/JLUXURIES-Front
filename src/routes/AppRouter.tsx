@@ -25,6 +25,13 @@ import AuditLogs from "../pages/admin/audit/AuditLogs";
 import ProductsPage from "../pages/products/ProductsPage";
 import UserAuditLogs from "../pages/admin/audit/UserAuditLogs";
 
+import AdminEnvios from "../pages/admin/envios/AdminEnvios";
+import CreateGuidePage from "../pages/admin/envios/CreateGuidePage";
+import AdminGuides from "../pages/admin/envios/AdminGuides";
+import GuideDetailPage from "../pages/admin/envios/GuideDetailPage";
+import AdminQuotes from "../pages/admin/envios/AdminQuotes";
+import QuoteDetailPage from "../pages/admin/envios/QuoteDetailPage";
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -57,6 +64,14 @@ const AppRouter = () => {
             <Route path="/admin/create-client" element={<CreateClientPage />} />
             <Route path="/admin/edit-client/:id" element={<EditClientPage />} />
             <Route path="/admin/client/:id" element={<ClientDetailPage />} />
+
+            {/* Admin Envíos Routes */}
+            <Route path="/admin/envios" element={<AdminEnvios />} />
+            <Route path="/admin/envios/nueva" element={<CreateGuidePage />} />
+            <Route path="/admin/envios/guias" element={<AdminGuides />} />
+            <Route path="/admin/envios/guias/:id" element={<GuideDetailPage />} />
+            <Route path="/admin/envios/cotizaciones" element={<AdminQuotes />} />
+            <Route path="/admin/envios/cotizaciones/:id" element={<QuoteDetailPage />} />
 
             {/* Admin Audit Logs Route */}
             <Route path="/admin/audit-logs" element={<AuditLogs />} />

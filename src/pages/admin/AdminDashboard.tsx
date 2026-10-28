@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Package, Users, FileText, Plus, Eye } from "lucide-react";
+import { Package, Users, FileText, Plus, Eye, Truck } from "lucide-react";
 
 export default function AdminDashboard() {
     const { user } = useAuth();
@@ -19,8 +19,8 @@ export default function AdminDashboard() {
                         </p>
                     </div>
 
-                    {/* Main Modules Grid - 3 Columns */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Main Modules Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
                         {/* Productos Module */}
                         <div className="group bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl dark:shadow-none hover:border-blue-500 dark:hover:border-[#1E6BFF] hover:shadow-2xl dark:hover:shadow-[0_0_30px_#1E6BFF40] transition-all duration-300">
@@ -99,6 +99,47 @@ export default function AdminDashboard() {
                                     >
                                         <Eye className="h-4 w-4" />
                                         Ver Todos
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Envíos Module */}
+                        <div className="group bg-white dark:bg-white/5 backdrop-blur-sm border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-xl dark:shadow-none hover:border-blue-500 dark:hover:border-[#1E6BFF] hover:shadow-2xl dark:hover:shadow-[0_0_30px_#1E6BFF40] transition-all duration-300">
+                            <div className="p-6">
+                                {/* Header */}
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="h-14 w-14 bg-gradient-to-br from-orange-600 to-amber-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-orange-900/50 transition-all">
+                                        <Truck className="h-7 w-7 text-white" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                            Envíos
+                                        </h2>
+                                        <p className="text-gray-500 dark:text-gray-400 text-xs">99envíos</p>
+                                    </div>
+                                </div>
+
+                                {/* Description */}
+                                <p className="text-gray-600 dark:text-gray-300 text-sm mb-6">
+                                    Cotiza, genera guías y consulta historiales de envío.
+                                </p>
+
+                                {/* Actions */}
+                                <div className="space-y-2">
+                                    <Link
+                                        to="/admin/envios/nueva"
+                                        className="flex items-center gap-2 w-full px-4 py-2.5 bg-orange-50 dark:bg-orange-600/20 hover:bg-orange-100 dark:hover:bg-orange-600/30 border border-orange-200 dark:border-orange-500/30 rounded-lg text-orange-700 dark:text-orange-300 hover:text-orange-800 dark:hover:text-orange-200 transition-all text-sm font-medium"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                        Nueva Guía
+                                    </Link>
+                                    <Link
+                                        to="/admin/envios"
+                                        className="flex items-center gap-2 w-full px-4 py-2.5 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all text-sm font-medium"
+                                    >
+                                        <Eye className="h-4 w-4" />
+                                        Gestionar Envíos
                                     </Link>
                                 </div>
                             </div>
