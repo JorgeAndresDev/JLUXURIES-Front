@@ -1,4 +1,4 @@
-import { useTheme } from '../../context/ThemeContext';
+﻿import { useTheme } from '../../context/ThemeContext';
 import { Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,13 +9,13 @@ const ThemeToggle = () => {
         <button
             onClick={toggleTheme}
             className={`
-                relative w-14 h-7 rounded-full p-1 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-                ${theme === 'dark' ? 'bg-blue-600' : 'bg-gray-200'}
+                relative h-7 w-14 rounded-full p-1 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950
+                ${theme === 'dark' ? 'bg-brand-600' : 'bg-slate-200'}
             `}
-            aria-label="Toggle Theme"
+            aria-label={theme === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
         >
             <motion.div
-                className="w-5 h-5 bg-white rounded-full shadow-md flex items-center justify-center relative z-10"
+                className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm"
                 layout
                 transition={{ type: "spring", stiffness: 700, damping: 30 }}
                 style={{
@@ -24,9 +24,9 @@ const ThemeToggle = () => {
                 }}
             >
                 {theme === 'dark' ? (
-                    <Moon size={12} className="text-blue-600" />
+                    <Moon size={12} className="text-brand-600" />
                 ) : (
-                    <Sun size={12} className="text-yellow-500" />
+                    <Sun size={12} className="text-amber-500" />
                 )}
             </motion.div>
         </button>

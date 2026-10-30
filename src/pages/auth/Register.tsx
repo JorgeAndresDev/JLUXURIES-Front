@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import logo from '../../assets/Logo.png';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -30,9 +32,9 @@ const Register = () => {
     try {
       await register(formData);
       navigate('/login');
-    } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.detail || 'Error al registrarse');
+    } catch (err) {
+      const detail = axios.isAxiosError(err) ? err.response?.data?.detail : undefined;
+      setError(typeof detail === 'string' ? detail : 'Error al registrarse');
     } finally {
       setLoading(false);
     }
@@ -44,8 +46,8 @@ const Register = () => {
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
         <img
-          src="/src/assets/logo.png"
-          alt="Luxury Lifestyle"
+          src={logo}
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
 
@@ -61,7 +63,7 @@ const Register = () => {
 
         <div className="w-full max-w-md z-10 my-auto">
           <div className="lg:hidden text-center mb-8">
-            <img src="/src/assets/logo.png" alt="Luxury Lifestyle" className="w-32 h-32 mx-auto" />
+            <img src={logo} alt="JLUXURIES" className="w-32 h-32 mx-auto" />
           </div>
 
           <h2 className="text-3xl font-bold mb-2">Crear Cuenta</h2>

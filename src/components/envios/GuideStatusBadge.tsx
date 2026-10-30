@@ -1,4 +1,5 @@
-import { guideStateClass, guideStateLabel } from '../../utils/envios';
+import Badge from '../ui/Badge';
+import { guideStateLabel } from '../../utils/envios';
 import type { GuideState } from '../../types';
 
 interface GuideStatusBadgeProps {
@@ -6,12 +7,17 @@ interface GuideStatusBadgeProps {
     className?: string;
 }
 
+const toneByState = {
+    creada: 'brand',
+    pdf_generado: 'success',
+    pdf_error: 'warning',
+    cancelada: 'danger',
+} as const;
+
 const GuideStatusBadge = ({ estado, className = '' }: GuideStatusBadgeProps) => (
-    <span
-        className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${guideStateClass(estado)} ${className}`}
-    >
+    <Badge tone={toneByState[estado]} className={className}>
         {guideStateLabel(estado)}
-    </span>
+    </Badge>
 );
 
 export default GuideStatusBadge;

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Download, Loader2 } from 'lucide-react';
 
 import { getGuidePdf } from '../../services/Envios';
 import { getEnviosErrorMessage } from '../../utils/envios';
 import type { EnviosCarrier } from '../../types';
+import { buttonClass } from '../ui/buttonStyles';
 
 interface GuidePdfButtonProps {
     numeroGuia: string;
@@ -58,27 +59,24 @@ const GuidePdfButton = ({
         }
     };
 
-    const variantClass = variant === 'primary'
-        ? 'bg-gradient-to-r from-[#1E6BFF] to-blue-700 text-white shadow-lg shadow-blue-900/30 hover:from-blue-600 hover:to-blue-800'
-        : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-gray-200 dark:hover:bg-white/10';
-
     return (
         <div className="flex flex-col items-start gap-1.5">
             <button
                 type="button"
                 onClick={() => void handleClick()}
                 disabled={loading}
-                className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-60 ${variantClass}`}
+                aria-busy={loading}
+                className={buttonClass(variant)}
             >
                 {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                 ) : (
-                    <Download className="h-4 w-4" />
+                    <Download className="h-4 w-4" aria-hidden="true" />
                 )}
-                {loading ? 'Generando...' : label}
+                {loading ? 'Generando…' : label}
             </button>
             {error && (
-                <span className="max-w-xs text-xs text-red-600 dark:text-red-400">
+                <span role="alert" className="max-w-xs text-xs text-red-600 dark:text-red-400">
                     {error}
                 </span>
             )}

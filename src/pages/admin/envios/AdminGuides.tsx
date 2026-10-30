@@ -1,29 +1,23 @@
-import { useMemo, useState, type FormEvent } from 'react';
+﻿import { useMemo, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import {
-    ArrowLeft,
-    Eye,
-    Loader2,
-    Plus,
-    RefreshCw,
-    Search,
-} from 'lucide-react';
-import {
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    type ColumnDef,
-} from '@tanstack/react-table';
+import { Eye, Plus, RefreshCw, Search, Truck } from 'lucide-react';
+import type { ColumnDef } from '@tanstack/react-table';
 
 import GuidePdfButton from '../../../components/envios/GuidePdfButton';
 import GuideStatusBadge from '../../../components/envios/GuideStatusBadge';
-import HistoryPagination from '../../../components/envios/HistoryPagination';
+import Alert from '../../../components/ui/Alert';
+import Badge from '../../../components/ui/Badge';
+import Button from '../../../components/ui/Button';
+import { buttonClass } from '../../../components/ui/buttonStyles';
+import { Card } from '../../../components/ui/Card';
+import DataTable from '../../../components/ui/DataTable';
+import EmptyState from '../../../components/ui/EmptyState';
+import { Input, Select } from '../../../components/ui/Field';
+import PageHeader from '../../../components/ui/PageHeader';
+import Pagination from '../../../components/ui/Pagination';
+import { useClients } from '../../../hooks/useClients';
 import { useGuideHistory } from '../../../hooks/useGuideHistory';
-import {
-    carrierLabel,
-    formatCOP,
-    formatDate,
-} from '../../../utils/envios';
+import { carrierLabel, formatCOP, formatDate } from '../../../utils/envios';
 import type {
     EnviosCarrier,
     GuideHistoryItem,
@@ -43,25 +37,28 @@ const AdminGuides = () => {
         filters,
         updateFilters,
         refresh,
+        lastSyncedAt,
     } = useGuideHistory();
+    const { clients } = useClients();
     const [numeroInput, setNumeroInput] = useState(filters.numeroGuia);
 
-    const columns = useMemo<ColumnDef<GuideHistoryItem>[]>(
+    const columns = useMemo<ColumnDef<GuideHistoryItem, unknown>[]>(
         () => [
             {
                 accessorKey: 'id_guia',
                 header: 'ID',
+                meta: { className: 'hidden lg:table-cell' },
                 cell: (info) => (
-                    <span className="font-mono text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-mono text-xs text-slate-400">
                         #{info.getValue() as number}
                     </span>
                 ),
             },
             {
                 accessorKey: 'numero_guia',
-                header: 'Número de guía',
+                header: 'Guía',
                 cell: (info) => (
-                    <span className="font-mono text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="font-mono text-sm font-semibold text-slate-900 dark:text-white">
                         {info.getValue() as string}
                     </span>
                 ),
@@ -69,8 +66,9 @@ const AdminGuides = () => {
             {
                 accessorKey: 'transportadora',
                 header: 'Transportadora',
+                meta: { className: 'hidden sm:table-cell' },
                 cell: (info) => (
-                    <span className="font-medium text-gray-700 dark:text-gray-200">
+                    <span className="text-sm text-slate-600 dark:text-slate-300">
                         {carrierLabel(info.getValue() as string)}
                     </span>
                 ),
@@ -78,8 +76,9 @@ const AdminGuides = () => {
             {
                 accessorKey: 'valor_declarado',
                 header: 'Valor declarado',
+                meta: { className: 'hidden lg:table-cell' },
                 cell: (info) => (
-                    <span className="font-semibold text-green-600 dark:text-green-400">
+                    <span className="text-sm font-medium tabular-nums text-slate-900 dark:text-white">
                         {formatCOP(info.getValue() as number)}
                     </span>
                 ),
@@ -94,34 +93,37 @@ const AdminGuides = () => {
             {
                 accessorKey: 'fecha_creacion',
                 header: 'Fecha',
+                meta: { className: 'hidden md:table-cell' },
                 cell: (info) => (
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">
                         {formatDate(info.getValue() as string)}
                     </span>
                 ),
             },
             {
                 id: 'actions',
-                header: 'Acciones',
+                header: '',
                 cell: (info) => {
                     const guide = info.row.original;
                     return (
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center justify-end gap-2">
                             <Link
                                 to={`/admin/envios/guias/${guide.id_guia}`}
                                 title="Ver detalle"
                                 aria-label={`Ver guía ${guide.numero_guia}`}
-                                className="rounded-lg border border-purple-500/30 bg-purple-600/20 p-2 text-purple-500 transition-all hover:border-purple-500/50 hover:bg-purple-600/30"
+                                className={buttonClass('secondary', 'sm', 'h-9 w-9 px-0')}
                             >
                                 <Eye className="h-4 w-4" />
                             </Link>
                             {guide.pdf_url && (
-                                <GuidePdfButton
-                                    numeroGuia={guide.numero_guia}
-                                    transportadora={guide.transportadora}
-                                    pdfUrl={guide.pdf_url}
-                                    label="PDF"
-                                />
+                                <div className="hidden sm:block">
+                                    <GuidePdfButton
+                                        numeroGuia={guide.numero_guia}
+                                        transportadora={guide.transportadora}
+                                        pdfUrl={guide.pdf_url}
+                                        label="PDF"
+                                    />
+                                </div>
                             )}
                         </div>
                     );
@@ -131,12 +133,6 @@ const AdminGuides = () => {
         [],
     );
 
-    const table = useReactTable({
-        data: items,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    });
-
     const handleSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         updateFilters({ numeroGuia: numeroInput.trim() });
@@ -144,185 +140,147 @@ const AdminGuides = () => {
 
     const handleReset = () => {
         setNumeroInput('');
-        updateFilters({ estado: '', transportadora: '', numeroGuia: '' });
+        updateFilters({
+            estado: '',
+            transportadora: '',
+            numeroGuia: '',
+            idCliente: '',
+        });
     };
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 transition-colors duration-300 dark:bg-gray-950">
-            <div className="container mx-auto px-4 pt-24 pb-12">
-                <div className="mb-8">
-                    <Link
-                        to="/admin/envios"
-                        className="mb-4 inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                        Volver a Envíos
-                    </Link>
-                    <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                        <div>
-                            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                Historial de guías
-                            </h1>
-                            <p className="mt-2 text-gray-600 dark:text-gray-400">
-                                Incluye las guías creadas aquí y las generadas directamente en 99envíos.
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-3 sm:flex-row">
-                            <button
-                                type="button"
-                                onClick={() => void refresh()}
-                                disabled={loading}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-gray-200 dark:hover:bg-white/10"
+        <div className="page-shell">
+            <div className="page-container">
+                <PageHeader
+                    backTo="/admin/envios"
+                    backLabel="Volver a Envíos"
+                    title="Historial de guías"
+                    description="Guías creadas en JLUXURIES y generadas directamente en 99envíos, sincronizadas en una sola vista."
+                    actions={
+                        <>
+                            <Button
+                                variant="secondary"
+                                loading={loading}
+                                icon={<RefreshCw className="h-4 w-4" />}
+                                onClick={() => void refresh({ sync: true })}
                             >
-                                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                                Actualizar
-                            </button>
-                            <Link
-                                to="/admin/envios/nueva"
-                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1E6BFF] to-blue-700 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-900/30 transition-all hover:from-blue-600 hover:to-blue-800"
-                            >
+                                {loading ? 'Sincronizando…' : 'Sincronizar 99envíos'}
+                            </Button>
+                            <Link to="/admin/envios/nueva" className={buttonClass('primary')}>
                                 <Plus className="h-4 w-4" />
                                 Nueva guía
                             </Link>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    }
+                />
+
+                {lastSyncedAt && !loading && (
+                    <p className="-mt-5 mb-6 flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500">
+                        <Truck className="h-3.5 w-3.5" />
+                        Última sincronización: {lastSyncedAt.toLocaleTimeString('es-CO', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        })}
+                    </p>
+                )}
 
                 {error && (
-                    <div className="mb-6 flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300 sm:flex-row sm:items-center sm:justify-between">
-                        <span>{error}</span>
-                        <button
-                            type="button"
-                            onClick={() => void refresh()}
-                            className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-300 px-3 py-2 font-semibold transition-colors hover:bg-red-100 dark:border-red-500/40 dark:hover:bg-red-500/20"
+                    <div className="mb-6">
+                        <Alert
+                            tone="error"
+                            title="No fue posible cargar las guías"
+                            action={
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    icon={<RefreshCw className="h-4 w-4" />}
+                                    onClick={() => void refresh({ sync: false })}
+                                >
+                                    Reintentar
+                                </Button>
+                            }
                         >
-                            <RefreshCw className="h-4 w-4" />
-                            Reintentar
-                        </button>
+                            {error}
+                        </Alert>
                     </div>
                 )}
 
-                <form
-                    onSubmit={handleSearch}
-                    className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/5 md:grid-cols-[1fr_auto_auto_auto]"
-                >
-                    <div className="relative">
-                        <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                        <input
-                            type="text"
-                            value={numeroInput}
-                            onChange={(event) => setNumeroInput(event.target.value)}
-                            placeholder="Buscar por número de guía..."
-                            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pl-12 text-gray-900 transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-white/10 dark:bg-black/20 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-[#1E6BFF] dark:focus:ring-[#1E6BFF]"
-                        />
-                    </div>
-                    <select
-                        value={filters.estado}
-                        onChange={(event) => updateFilters({
-                            estado: event.target.value as GuideState | '',
-                        })}
-                        className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-white/10 dark:bg-black/20 dark:text-white dark:focus:border-[#1E6BFF]"
+                <Card className="mb-6 p-4">
+                    <form
+                        onSubmit={handleSearch}
+                        className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
                     >
-                        <option value="">Todos los estados</option>
-                        <option value="creada">Creada</option>
-                        <option value="pdf_generado">PDF generado</option>
-                        <option value="pdf_error">PDF con error</option>
-                        <option value="cancelada">Cancelada</option>
-                    </select>
-                    <select
-                        value={filters.transportadora}
-                        onChange={(event) => updateFilters({
-                            transportadora: event.target.value as EnviosCarrier | '',
-                        })}
-                        className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 outline-none transition-all focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-white/10 dark:bg-black/20 dark:text-white dark:focus:border-[#1E6BFF]"
-                    >
-                        <option value="">Todas las transportadoras</option>
-                        <option value="interrapidisimo">Interrapidísimo</option>
-                        <option value="tcc">TCC</option>
-                        <option value="servientrega">Servientrega</option>
-                        <option value="coordinadora">Coordinadora</option>
-                        <option value="envia">Envía</option>
-                    </select>
-                    <div className="flex gap-2">
-                        <button
-                            type="submit"
-                            className="flex-1 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
+                        <div className="relative">
+                            <Search
+                                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                                aria-hidden="true"
+                            />
+                            <Input
+                                value={numeroInput}
+                                onChange={(event) => setNumeroInput(event.target.value)}
+                                placeholder="Buscar por número de guía"
+                                aria-label="Buscar por número de guía"
+                                className="pl-10"
+                            />
+                        </div>
+                        <Select
+                            value={filters.estado}
+                            onChange={(event) => updateFilters({
+                                estado: event.target.value as GuideState | '',
+                            })}
+                            aria-label="Filtrar por estado"
                         >
-                            Buscar
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleReset}
-                            className="rounded-xl border border-gray-200 px-4 py-3 font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-white/10 dark:text-gray-300 dark:hover:bg-white/10"
+                            <option value="">Todos los estados</option>
+                            <option value="creada">Creada</option>
+                            <option value="pdf_generado">PDF generado</option>
+                            <option value="pdf_error">PDF con error</option>
+                            <option value="cancelada">Cancelada</option>
+                        </Select>
+                        <Select
+                            value={filters.transportadora}
+                            onChange={(event) => updateFilters({
+                                transportadora: event.target.value as EnviosCarrier | '',
+                            })}
+                            aria-label="Filtrar por transportadora"
                         >
-                            Limpiar
-                        </button>
-                    </div>
-                </form>
+                            <option value="">Todas las transportadoras</option>
+                            <option value="interrapidisimo">Interrapidísimo</option>
+                            <option value="tcc">TCC</option>
+                            <option value="servientrega">Servientrega</option>
+                            <option value="coordinadora">Coordinadora</option>
+                            <option value="envia">Envía</option>
+                        </Select>
+                        <Select
+                            value={filters.idCliente}
+                            onChange={(event) => updateFilters({
+                                idCliente: event.target.value ? Number(event.target.value) : '',
+                            })}
+                            aria-label="Filtrar por cliente"
+                        >
+                            <option value="">Todos los clientes</option>
+                            {clients.map((client) => (
+                                <option key={client.id_cliente} value={client.id_cliente}>
+                                    {client.nombre} · {client.email}
+                                </option>
+                            ))}
+                        </Select>
+                        <div className="flex gap-2">
+                            <Button type="submit" className="flex-1">Buscar</Button>
+                            <Button type="button" variant="ghost" onClick={handleReset}>
+                                Limpiar
+                            </Button>
+                        </div>
+                    </form>
+                </Card>
 
-                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-                    {loading ? (
-                        <div className="flex items-center justify-center py-20">
-                            <Loader2 className="h-12 w-12 animate-spin text-[#1E6BFF]" />
-                        </div>
-                    ) : items.length === 0 ? (
-                        <div className="py-20 text-center">
-                            <p className="text-lg text-gray-500 dark:text-gray-400">
-                                No hay guías guardadas ni registradas en 99envíos.
-                            </p>
-                            <Link
-                                to="/admin/envios/nueva"
-                                className="mt-4 inline-block font-semibold text-[#1E6BFF] hover:text-blue-500"
-                            >
-                                Crear la primera guía →
-                            </Link>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        {table.getHeaderGroups().map((headerGroup) => (
-                                            <tr
-                                                key={headerGroup.id}
-                                                className="border-b border-gray-200 bg-gray-50 dark:border-white/10 dark:bg-white/5"
-                                            >
-                                                {headerGroup.headers.map((header) => (
-                                                    <th
-                                                        key={header.id}
-                                                        className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300"
-                                                    >
-                                                        {header.isPlaceholder
-                                                            ? null
-                                                            : flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext(),
-                                                            )}
-                                                    </th>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </thead>
-                                    <tbody>
-                                        {table.getRowModel().rows.map((row) => (
-                                            <tr
-                                                key={row.id}
-                                                className="border-b border-gray-100 transition-colors hover:bg-gray-50 dark:border-white/5 dark:hover:bg-white/5"
-                                            >
-                                                {row.getVisibleCells().map((cell) => (
-                                                    <td key={cell.id} className="px-6 py-4">
-                                                        {flexRender(
-                                                            cell.column.columnDef.cell,
-                                                            cell.getContext(),
-                                                        )}
-                                                    </td>
-                                                ))}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <HistoryPagination
+                <div className="table-shell">
+                    <DataTable
+                        data={items}
+                        columns={columns}
+                        loading={loading}
+                        minWidthClass="min-w-full sm:min-w-[860px]"
+                        footer={(
+                            <Pagination
                                 pageIndex={pageIndex}
                                 pageSize={pageSize}
                                 total={total}
@@ -330,9 +288,38 @@ const AdminGuides = () => {
                                 onPageChange={setPageIndex}
                                 onPageSizeChange={changePageSize}
                             />
-                        </>
-                    )}
+                        )}
+                        emptyState={(
+                            <EmptyState
+                                icon={<Truck className="h-6 w-6" />}
+                                title="Aún no hay guías"
+                                description="Crea una guía o sincroniza las que ya existen en 99envíos."
+                                action={(
+                                    <div className="flex flex-wrap justify-center gap-2">
+                                        <Link to="/admin/envios/nueva" className={buttonClass('primary')}>
+                                            <Plus className="h-4 w-4" />
+                                            Nueva guía
+                                        </Link>
+                                        <Button
+                                            variant="secondary"
+                                            icon={<RefreshCw className="h-4 w-4" />}
+                                            onClick={() => void refresh({ sync: true })}
+                                        >
+                                            Sincronizar
+                                        </Button>
+                                    </div>
+                                )}
+                            />
+                        )}
+                    />
                 </div>
+
+                {!loading && items.length > 0 && (
+                    <p className="mt-4 flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+                        <Badge tone="neutral">99envíos</Badge>
+                        La sincronización consulta el historial remoto antes de responder.
+                    </p>
+                )}
             </div>
         </div>
     );

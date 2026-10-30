@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/axios';
+import logo from '../../assets/Logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,34 +22,15 @@ const Login = () => {
     setError('');
     try {
       const response = await api.post('/auth/login', { email, password });
-      console.log('=== FULL LOGIN RESPONSE ===');
-      console.log('Full response.data:', JSON.stringify(response.data, null, 2));
-      console.log('access_token:', response.data.access_token);
-      console.log('usuario:', response.data.usuario);
-      console.log('typeof usuario:', typeof response.data.usuario);
-
       const { access_token, usuario } = response.data;
 
-      // Handle if usuario is a string (just the name) or an object
-      let userObject;
-      if (typeof usuario === 'string') {
-        // If backend only returns name, create a user object
-        userObject = {
-          email: email,
-          nombre: usuario
-        };
-        console.warn('⚠️ Backend returned usuario as string. Missing: id_cliente, telefono, direccion');
-      } else {
-        // If backend returns full object
-        userObject = usuario;
-        console.log('✅ Backend returned usuario as object:', userObject);
-      }
+      const userObject = typeof usuario === 'string'
+        ? { email, nombre: usuario }
+        : usuario;
 
-      console.log('User object to save:', userObject);
       login(access_token, userObject);
       navigate('/');
     } catch (err) {
-      console.error(err);
       const detail = axios.isAxiosError(err) ? err.response?.data?.detail : undefined;
       setError(typeof detail === 'string' ? detail : 'Error al iniciar sesi\u00f3n');
     }
@@ -60,8 +42,8 @@ const Login = () => {
       <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10"></div>
         <img
-          src="/src/assets/logo.png"
-          alt="Luxury Motorcycle"
+          src={logo}
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
@@ -75,7 +57,7 @@ const Login = () => {
 
         <div className="w-full max-w-md z-10">
           <div className="lg:hidden text-center mb-10">
-            <img src="/src/assets/Logo.png" alt="JLUXURIES" className="w-32 h-auto mx-auto" />
+            <img src={logo} alt="JLUXURIES" className="w-32 h-auto mx-auto" />
           </div>
 
           <h2 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Bienvenido de nuevo</h2>

@@ -12,12 +12,14 @@ export interface GuideHistoryFilters {
     estado: GuideState | '';
     transportadora: EnviosCarrier | '';
     numeroGuia: string;
+    idCliente: number | '';
 }
 
 const initialFilters: GuideHistoryFilters = {
     estado: '',
     transportadora: '',
     numeroGuia: '',
+    idCliente: '',
 };
 
 export const useGuideHistory = () => {
@@ -28,8 +30,9 @@ export const useGuideHistory = () => {
     const [pageIndex, setPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [filters, setFilters] = useState<GuideHistoryFilters>(initialFilters);
+    const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
 
-    const fetchHistory = useCallback(async () => {
+    const fetchHistory = useCallback(async (options?: { sync?: boolean }) => {
         setLoading(true);
         try {
             const data = await getGuideHistory({
@@ -38,9 +41,12 @@ export const useGuideHistory = () => {
                 estado: filters.estado || undefined,
                 transportadora: filters.transportadora || undefined,
                 numero_guia: filters.numeroGuia.trim() || undefined,
+                id_cliente: filters.idCliente || undefined,
+                sync: options?.sync ?? true,
             });
             setItems(data.items);
             setTotal(data.total);
+            setLastSyncedAt(new Date());
             setError(null);
         } catch (err) {
             setItems([]);
@@ -77,5 +83,6 @@ export const useGuideHistory = () => {
         filters,
         updateFilters,
         refresh: fetchHistory,
+        lastSyncedAt,
     };
 };

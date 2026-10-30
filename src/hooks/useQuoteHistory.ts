@@ -7,11 +7,13 @@ import type { QuoteHistoryItem, QuoteState } from '../types';
 export interface QuoteHistoryFilters {
     estado: QuoteState | '';
     codigoDestino: string;
+    idCliente: number | '';
 }
 
 const initialFilters: QuoteHistoryFilters = {
     estado: '',
     codigoDestino: '',
+    idCliente: '',
 };
 
 export const useQuoteHistory = () => {
@@ -31,6 +33,7 @@ export const useQuoteHistory = () => {
                 offset: pageIndex * pageSize,
                 estado: filters.estado || undefined,
                 codigo_destino: filters.codigoDestino.trim() || undefined,
+                id_cliente: filters.idCliente || undefined,
             });
             setItems(data.items);
             setTotal(data.total);

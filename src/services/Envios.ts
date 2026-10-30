@@ -1,4 +1,4 @@
-import api from '../api/axios';
+﻿import api from '../api/axios';
 
 import type {
     DaneCitiesResponse,
@@ -24,6 +24,7 @@ export interface GuideHistoryParams {
     id_cliente?: number;
     numero_guia?: string;
     transportadora?: EnviosCarrier;
+    sync?: boolean;
 }
 
 export interface QuoteHistoryParams {

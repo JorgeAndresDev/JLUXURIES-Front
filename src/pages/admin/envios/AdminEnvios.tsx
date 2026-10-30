@@ -1,225 +1,240 @@
 import { Link } from 'react-router-dom';
 import {
     AlertTriangle,
-    ArrowLeft,
+    ArrowRight,
     Building2,
     CheckCircle2,
     FileText,
     ListChecks,
-    Loader2,
     MapPin,
+    Phone,
     RefreshCw,
     Truck,
+    XCircle,
 } from 'lucide-react';
 
+import Alert from '../../../components/ui/Alert';
+import Badge from '../../../components/ui/Badge';
+import Button from '../../../components/ui/Button';
+import { buttonClass } from '../../../components/ui/buttonStyles';
+import { Card, CardHeader, Tile } from '../../../components/ui/Card';
+import PageHeader from '../../../components/ui/PageHeader';
 import { useEnviosStatus } from '../../../hooks/useEnviosStatus';
 import { formatDuration } from '../../../utils/envios';
 
 const AdminEnvios = () => {
-    const {
-        status,
-        branch,
-        loading,
-        error,
-        refresh,
-    } = useEnviosStatus();
+    const { status, branch, loading, error, refresh } = useEnviosStatus();
+
+    const connectionLabel = status?.authenticated
+        ? 'Conectada'
+        : status
+            ? 'Sin autenticar'
+            : 'Sin verificar';
 
     return (
-        <div className="min-h-screen w-full bg-gray-50 transition-colors duration-300 dark:bg-gray-950">
-            <div className="container mx-auto px-4 pt-24 pb-12">
-                <div className="mx-auto max-w-7xl">
-                    <div className="mb-8">
-                        <Link
-                            to="/admin"
-                            className="mb-4 inline-flex items-center gap-2 text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                        >
-                            <ArrowLeft className="h-4 w-4" />
-                            Volver al Dashboard
-                        </Link>
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Centro de Envíos
-                        </h1>
-                        <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-                            Cotiza, genera guías y consulta el historial de 99envíos.
-                        </p>
-                    </div>
-
-                    {error && (
-                        <div className="mb-6 flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-300 sm:flex-row sm:items-center sm:justify-between">
-                            <span className="inline-flex items-center gap-2">
-                                <AlertTriangle className="h-4 w-4 shrink-0" />
-                                {error}
-                            </span>
-                            <button
-                                type="button"
+        <div className="page-shell">
+            <div className="page-container">
+                <PageHeader
+                    backTo="/admin"
+                    backLabel="Volver al Dashboard"
+                    title="Envíos"
+                    description="Cotiza, genera guías y consulta el historial de 99envíos desde un solo lugar."
+                    actions={(
+                        <>
+                            <Button
+                                variant="secondary"
+                                loading={loading}
+                                icon={<RefreshCw className="h-4 w-4" />}
                                 onClick={() => void refresh()}
-                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-300 px-3 py-2 font-semibold transition-colors hover:bg-red-100 dark:border-red-500/40 dark:hover:bg-red-500/20"
                             >
-                                <RefreshCw className="h-4 w-4" />
-                                Reintentar
-                            </button>
-                        </div>
+                                Actualizar estado
+                            </Button>
+                            <Link to="/admin/envios/nueva" className={buttonClass('primary')}>
+                                <Truck className="h-4 w-4" />
+                                Nueva guía
+                            </Link>
+                        </>
                     )}
+                />
 
-                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-                            <div className="mb-5 flex items-center gap-4">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 shadow-lg">
-                                    <Truck className="h-7 w-7 text-white" />
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                                        Integración 99envíos
-                                    </h2>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        Estado de la conexión
-                                    </p>
-                                </div>
-                            </div>
-
-                            {loading ? (
-                                <div className="flex items-center gap-2 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    Consultando estado...
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-white/10 dark:bg-black/20">
-                                        <span className="text-sm text-gray-600 dark:text-gray-300">Conexión</span>
-                                        <span className={`inline-flex items-center gap-1.5 text-sm font-semibold ${status?.authenticated
-                                            ? 'text-green-600 dark:text-green-400'
-                                            : 'text-red-600 dark:text-red-400'
-                                            }`}>
-                                            <CheckCircle2 className="h-4 w-4" />
-                                            {status?.authenticated ? 'Autenticada' : 'No disponible'}
-                                        </span>
-                                    </div>
-                                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-white/10 dark:bg-black/20">
-                                            <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Proveedor</p>
-                                            <p className="mt-1 font-semibold text-gray-900 dark:text-white">
-                                                {status?.provider ?? '99envíos'}
-                                            </p>
-                                        </div>
-                                        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-white/10 dark:bg-black/20">
-                                            <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Token</p>
-                                            <p className="mt-1 font-semibold text-gray-900 dark:text-white">
-                                                {status ? formatDuration(status.expires_in_seconds) : '—'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => void refresh()}
-                                        className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-gray-200 dark:hover:bg-white/10"
-                                    >
-                                        <RefreshCw className="h-4 w-4" />
-                                        Actualizar estado
-                                    </button>
-                                </div>
+                {error && (
+                    <div className="mb-6">
+                        <Alert
+                            tone="error"
+                            title="No fue posible consultar la integración"
+                            action={(
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    icon={<RefreshCw className="h-4 w-4" />}
+                                    onClick={() => void refresh()}
+                                >
+                                    Reintentar
+                                </Button>
                             )}
-                        </section>
+                        >
+                            {error}
+                        </Alert>
+                    </div>
+                )}
 
-                        <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-                            <div className="mb-5 flex items-center gap-4">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg">
-                                    <Building2 className="h-7 w-7 text-white" />
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                                        Sucursal de origen
-                                    </h2>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                                        Datos configurados en 99envíos
-                                    </p>
-                                </div>
-                            </div>
+                {status && !status.configured && (
+                    <div className="mb-6">
+                        <Alert tone="warning" title="Integración no configurada">
+                            Configura las credenciales de 99envíos en el servidor para habilitar cotizaciones y guías.
+                        </Alert>
+                    </div>
+                )}
 
-                            {loading ? (
-                                <div className="flex items-center gap-2 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    Consultando sucursal...
-                                </div>
-                            ) : branch ? (
-                                <div className="space-y-3">
-                                    <div>
-                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">{branch.nombre_sucursal}</p>
-                                        <p className="font-mono text-sm text-gray-500 dark:text-gray-400">{branch.codigo_sucursal}</p>
-                                    </div>
-                                    <div className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-                                        <span>{branch.direccion}, {branch.ciudad_origen}</span>
-                                    </div>
-                                    <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-white/10 dark:bg-black/20">
-                                        <span className="text-gray-500 dark:text-gray-400">Teléfono: </span>
-                                        <span className="font-semibold text-gray-900 dark:text-white">{branch.telefono}</span>
-                                    </div>
-                                </div>
-                            ) : (
-                                <p className="py-4 text-sm text-gray-500 dark:text-gray-400">
-                                    No fue posible cargar la sucursal de origen.
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                    <Card className="p-5">
+                        <CardHeader
+                            icon={<Truck className="h-5 w-5" />}
+                            title="Conexión 99envíos"
+                            description="Estado de la cuenta y vigencia de la sesión"
+                            action={(
+                                <Badge tone={status?.authenticated ? 'success' : status ? 'warning' : 'neutral'}>
+                                    {connectionLabel}
+                                </Badge>
+                            )}
+                        />
+
+                        <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <Tile className="p-4">
+                                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Proveedor
                                 </p>
-                            )}
-                        </section>
-                    </div>
+                                <p className="mt-1.5 text-base font-semibold text-slate-900 dark:text-white">
+                                    {status?.provider ?? '99envíos'}
+                                </p>
+                            </Tile>
+                            <Tile className="p-4">
+                                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                    Sesión
+                                </p>
+                                <p className="mt-1.5 flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+                                    {status?.authenticated ? (
+                                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                    ) : (
+                                        <XCircle className="h-4 w-4 text-slate-400" />
+                                    )}
+                                    {status ? formatDuration(status.expires_in_seconds) : '—'}
+                                </p>
+                            </Tile>
+                        </div>
+                    </Card>
 
-                    <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-                        <Link
-                            to="/admin/envios/nueva"
-                            className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-sm transition-all hover:border-blue-500 hover:shadow-2xl dark:border-white/10 dark:bg-white/5 dark:shadow-none dark:hover:border-[#1E6BFF] dark:hover:shadow-[0_0_30px_#1E6BFF40]"
-                        >
-                            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E6BFF] to-blue-700 shadow-lg">
-                                <Truck className="h-7 w-7 text-white" />
+                    <Card className="p-5">
+                        <CardHeader
+                            icon={<Building2 className="h-5 w-5" />}
+                            title="Sucursal de origen"
+                            description="Datos con los que se generan las guías"
+                        />
+
+                        {loading ? (
+                            <div className="mt-5 space-y-3">
+                                <div className="skeleton h-7 w-2/3" />
+                                <div className="skeleton h-4 w-full" />
+                                <div className="skeleton h-10 w-full" />
                             </div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Nueva guía</h2>
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                                Cotiza el envío, registra el destinatario y genera la guía.
-                            </p>
-                            <span className="mt-4 inline-block text-sm font-semibold text-[#1E6BFF]">
-                                Crear envío →
-                            </span>
-                        </Link>
-
-                        <Link
-                            to="/admin/envios/guias"
-                            className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-sm transition-all hover:border-green-500 hover:shadow-2xl dark:border-white/10 dark:bg-white/5 dark:shadow-none dark:hover:border-green-500 dark:hover:shadow-[0_0_30px_rgba(34,197,94,0.25)]"
-                        >
-                            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 shadow-lg">
-                                <ListChecks className="h-7 w-7 text-white" />
+                        ) : branch ? (
+                            <div className="mt-5 space-y-3">
+                                <div>
+                                    <p className="text-xl font-semibold text-slate-900 dark:text-white">
+                                        {branch.nombre_sucursal}
+                                    </p>
+                                    <p className="mt-0.5 font-mono text-sm text-slate-500 dark:text-slate-400">
+                                        {branch.codigo_sucursal}
+                                    </p>
+                                </div>
+                                <div className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
+                                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                                    <span>{branch.direccion}, {branch.ciudad_origen}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                                    <Phone className="h-4 w-4 shrink-0 text-slate-400" />
+                                    <span>{branch.telefono}</span>
+                                </div>
                             </div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Guías generadas</h2>
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                                Consulta estados, destinatarios y descarga los PDF.
+                        ) : (
+                            <p className="mt-5 text-sm text-slate-500 dark:text-slate-400">
+                                No fue posible cargar la sucursal de origen.
                             </p>
-                            <span className="mt-4 inline-block text-sm font-semibold text-green-600 dark:text-green-400">
-                                Ver historial →
-                            </span>
-                        </Link>
+                        )}
+                    </Card>
+                </div>
 
-                        <Link
-                            to="/admin/envios/cotizaciones"
-                            className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-xl backdrop-blur-sm transition-all hover:border-orange-500 hover:shadow-2xl dark:border-white/10 dark:bg-white/5 dark:shadow-none dark:hover:border-orange-500 dark:hover:shadow-[0_0_30px_rgba(249,115,22,0.25)]"
-                        >
-                            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-600 to-amber-600 shadow-lg">
-                                <FileText className="h-7 w-7 text-white" />
-                            </div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Cotizaciones</h2>
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                                Revisa las cotizaciones guardadas y sus tarifas.
-                            </p>
-                            <span className="mt-4 inline-block text-sm font-semibold text-orange-600 dark:text-orange-400">
-                                Ver historial →
-                            </span>
-                        </Link>
-                    </div>
-
-                    <div className="mt-6 flex items-start gap-3 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-500/30 dark:bg-yellow-500/10 dark:text-yellow-200">
-                        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
-                        <p>
-                            La generación de una guía es una operación real y puede generar costos con la transportadora.
-                            No reintentes automáticamente si la respuesta falla: revisa el historial antes de volver a intentar.
+                <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
+                    <Link
+                        to="/admin/envios/nueva"
+                        className="card group p-5 transition hover:border-brand-300 hover:shadow-lift dark:hover:border-brand-500/40"
+                    >
+                        <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-300">
+                            <Truck className="h-5 w-5" />
+                        </span>
+                        <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                            Nueva guía
+                        </h2>
+                        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            Cotiza, completa el destinatario y genera la guía.
                         </p>
-                    </div>
+                        <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400">
+                            Crear envío
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                    </Link>
+
+                    <Link
+                        to="/admin/envios/guias"
+                        className="card group p-5 transition hover:border-brand-300 hover:shadow-lift dark:hover:border-brand-500/40"
+                    >
+                        <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300">
+                            <ListChecks className="h-5 w-5" />
+                        </span>
+                        <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                            Guías
+                        </h2>
+                        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            Sincroniza 99envíos y descarga los PDF generados.
+                        </p>
+                        <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400">
+                            Ver historial
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                    </Link>
+
+                    <Link
+                        to="/admin/envios/cotizaciones"
+                        className="card group p-5 transition hover:border-brand-300 hover:shadow-lift dark:hover:border-brand-500/40"
+                    >
+                        <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-600 dark:bg-white/5 dark:text-slate-300">
+                            <FileText className="h-5 w-5" />
+                        </span>
+                        <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                            Cotizaciones
+                        </h2>
+                        <p className="mt-1.5 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            Revisa tarifas guardadas y la transportadora elegida.
+                        </p>
+                        <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 dark:text-brand-400">
+                            Ver tarifas
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        </span>
+                    </Link>
+                </div>
+
+                <div className="mt-5">
+                    <Alert tone="warning" title="La creación de guías tiene costo">
+                        Generar una guía es una operación real con la transportadora. Si la respuesta falla,
+                        revisa el historial antes de volver a intentarlo.
+                    </Alert>
+                </div>
+
+                <div className="mt-5 flex items-start gap-2 text-xs text-slate-400 dark:text-slate-500">
+                    <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <p>
+                        La sincronización del historial consulta 99envíos cada vez que abres la lista de guías.
+                    </p>
                 </div>
             </div>
         </div>
